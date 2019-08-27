@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,6 +19,21 @@
     <properties>
         <java.version>12</java.version>
     </properties>
+    <repositories>
+        <!-- WA for the https://issues.apache.org/jira/browse/MNG-5781 -->
+        <repository>
+            <id>central2</id>
+            <url>https://nexussrv.netcracker.com/content/repositories/central</url>
+        </repository>
+        <repository>
+            <id>nc.thirdparty_sync</id>
+            <url>https://nexuscn.netcracker.com/content/repositories/nc.thirdparty_sync/</url>
+        </repository>
+        <repository>
+            <id>nc.general_sync</id>
+            <url>https://nexuscn.netcracker.com/content/repositories/nc.general_sync/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -71,7 +88,26 @@
             <artifactId>spring-web</artifactId>
             <version>5.1.9.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netcracker.telecom-business-api</groupId>
+            <artifactId>telecom-business-api-datamodel</artifactId>
+            <version>2.0.3.8_fix5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netcracker.tbapi-services</groupId>
+            <artifactId>tbapi-services-impl-oe</artifactId>
+            <version>10.2.2.10_fix4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netcracker.telecom-business-api</groupId>
+            <artifactId>telecom-business-api-tmf-order-entry-module</artifactId>
+            <version>2.0.3.8_fix5</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,4 +1,4 @@
-package com.hroniko.pnl.entity;
+package com.hroniko.pnl.entity.nodes;
 
 
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -110,8 +110,9 @@ public class CalcNode {
         return value;
     }
 
-    public void setValue(Double value) {
+    public CalcNode setValue(Double value) {
         this.value = value;
+        return this;
     }
 
     public String getValueType() {
@@ -136,16 +137,18 @@ public class CalcNode {
         return minValue;
     }
 
-    public void setMinValue(String minValue) {
+    public CalcNode setMinValue(String minValue) {
         this.minValue = minValue;
+        return this;
     }
 
     public String getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(String maxValue) {
+    public CalcNode setMaxValue(String maxValue) {
         this.maxValue = maxValue;
+        return this;
     }
 
     public CalcNode addChild(CalcNode calcNode) {

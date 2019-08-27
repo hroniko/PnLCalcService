@@ -1,11 +1,21 @@
-package com.hroniko.pnl.entity;
+package com.hroniko.pnl.entity.other;
 
 public class PnLCalculationNode {
+    String name;
     String value;
     String currencyCode;
     boolean isPercent;
     String minValue;
     String maxValue;
+
+    public String getName() {
+        return name;
+    }
+
+    public PnLCalculationNode setName(String name) {
+        this.name = name;
+        return this;
+    }
 
     public String getValue() {
         return value;

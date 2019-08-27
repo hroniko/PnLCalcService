@@ -1,6 +1,6 @@
 package com.hroniko.pnl.repo;
 
-import com.hroniko.pnl.entity.CalcNode;
+import com.hroniko.pnl.entity.nodes.CalcNode;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CalcNodeRepository extends CrudRepository<CalcNode, Long> {

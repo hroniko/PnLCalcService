@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.hroniko.pnl.entity;
+package com.hroniko.pnl.entity.other;
 
 public abstract class AbstractCharacteristicValue<T> {
     private static final long serialVersionUID = -6524899961842198462L;

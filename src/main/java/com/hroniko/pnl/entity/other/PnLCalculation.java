@@ -1,4 +1,4 @@
-package com.hroniko.pnl.entity;
+package com.hroniko.pnl.entity.other;
 
 
 public class PnLCalculation {
