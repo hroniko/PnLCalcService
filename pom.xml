@@ -98,16 +98,16 @@
             <artifactId>telecom-business-api-datamodel</artifactId>
             <version>2.0.3.8_fix5</version>
         </dependency>
-        <dependency>
-            <groupId>com.netcracker.tbapi-services</groupId>
-            <artifactId>tbapi-services-impl-oe</artifactId>
-            <version>10.2.2.10_fix4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.netcracker.telecom-business-api</groupId>
-            <artifactId>telecom-business-api-tmf-order-entry-module</artifactId>
-            <version>2.0.3.8_fix5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.netcracker.tbapi-services</groupId>-->
+<!--            <artifactId>tbapi-services-impl-oe</artifactId>-->
+<!--            <version>10.2.2.10_fix4</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.netcracker.telecom-business-api</groupId>-->
+<!--            <artifactId>telecom-business-api-tmf-order-entry-module</artifactId>-->
+<!--            <version>2.0.3.8_fix5</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
