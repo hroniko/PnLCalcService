@@ -73,6 +73,7 @@ public class PnLCalculationService {
     public List<PnLCalculationNode> calculateByQuote(Quote quote){
 
         List<PriceItem> priceItems = getPriceItemsByQuote(quote);
+        priceItems = priceItems.stream().filter(pi -> pi.getTotalMRC() + pi.getTotalNRC() > 0.0).collect(Collectors.toList());
 
         List<CalcNode> allCalcNodes = getAllCalcNodes();
         List<CalcNode> finalCalcNodes = allCalcNodes.stream()
@@ -88,8 +89,8 @@ public class PnLCalculationService {
         finalCalcNodes.forEach(cn -> indicatorValueMap.put(cn.getName(), 0d));
 
         priceItems.forEach(priceItem -> {
-            enrichByPexCatalog(finalCalcNodes, priceItem.getOfferingId());
-            enrichByPrice(finalCalcNodes, priceItem);
+            enrichByPexCatalog(allCalcNodes, priceItem.getOfferingId());
+            enrichByPrice(allCalcNodes, priceItem);
             recalculateValues(finalCalcNodes);
             checkAndSaveResult(finalCalcNodes, indicatorValueMap);
             checkAndSaveResult(allCalcNodes, allValueMap);
@@ -101,9 +102,11 @@ public class PnLCalculationService {
                 .filter(cn -> "Summary".equals(cn.getAttitudeToItems()))
                 .forEach(calcNodeSummary -> {
                     String name = calcNodeSummary.getName();
-                    Double value = recalculateSummaryResult(allValueMap, calcNodeSummary);
-                    allValueMap.put(name, value);
-                    if (indicatorValueMap.containsKey(name)) indicatorValueMap.put(name, value);
+                    if (indicatorValueMap.containsKey(name)) {
+                        Double value = recalculateSummaryResult(allValueMap, calcNodeSummary);
+                        allValueMap.put(name, value);
+                        indicatorValueMap.put(name, value);
+                    }
                 });
 
         return indicatorValueMap.entrySet().stream()
