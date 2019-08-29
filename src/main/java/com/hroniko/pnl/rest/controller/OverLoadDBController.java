@@ -7,13 +7,17 @@ import com.hroniko.pnl.entity.nodes.additional.CalcNodeConst;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeFinal;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeRefvar;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeVar;
+import com.hroniko.pnl.entity.toms.CalculationStructure;
 import com.hroniko.pnl.repo.CapexRepository;
 import com.hroniko.pnl.repo.CalcNodeRepository;
 import com.hroniko.pnl.repo.OpexRepository;
+import com.hroniko.pnl.rest.service.DBService;
 import com.hroniko.pnl.rest.service.PnLCalculationService;
+import com.netcracker.tbapi.services.common.order.QuoteSalesOrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +26,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 import java.util.List;
 
+import static com.hroniko.pnl.entity.constants.AttitudeToItems.*;
+import static com.hroniko.pnl.entity.constants.FinalValue.*;
+import static com.hroniko.pnl.entity.constants.NodeType.*;
+import static com.hroniko.pnl.entity.constants.NodeValueType.*;
+
 @RestController
 @RequestMapping("/repo")
 public class OverLoadDBController {
+
+    @Autowired
+    DBService dbService;
 
     @Autowired
     CalcNodeRepository calcNodeRepository;
@@ -38,6 +50,8 @@ public class OverLoadDBController {
     @Autowired
     PnLCalculationService pnLCalculationService;
 
+    private static final String EMPTY = "";
+
     @RequestMapping(value = {"/restart"}, method = RequestMethod.GET)
     public ResponseEntity restartDB(HttpServletRequest request){
 
@@ -48,43 +62,43 @@ public class OverLoadDBController {
         CalcNode CH_index = new CalcNode()
                 .setName("CH_index")
                 .setFormula("0.007")
-                .setType("cont")
-                .setFinal(false)
-                .setValueType("Natural")
-                .setAttitudeToItems("Summary")
+                .setType(CONST)
+                .setFinal(NO)
+                .setValueType(NATURAL)
+                .setAttitudeToItems(SUMMARY)
                 .setDescription("Churn index");
 
         CalcNode Capex_Depreciation_index = new CalcNode()
                 .setName("Capex_Depreciation_index")
                 .setFormula("60")
-                .setType("cont")
-                .setFinal(false)
-                .setValueType("Natural")
-                .setAttitudeToItems("Summary")
-                .setDescription("");
+                .setType(CONST)
+                .setFinal(NO)
+                .setValueType(NATURAL)
+                .setAttitudeToItems(SUMMARY)
+                .setDescription(EMPTY);
 
         CalcNode DEXT = new CalcNodeRefvar()
                 .setName("DEXT")
                 .setFormula("0")
-                .setType("refvar")
-                .setFinal(false)
-                .setValueType("Natural")
-                .setAttitudeToItems("Every")
+                .setType(REFVAR)
+                .setFinal(NO)
+                .setValueType(NATURAL)
+                .setAttitudeToItems(EVERY)
                 .setDescription("discountExcludingTax");
 
         CalcNode FUFU_index = new CalcNodeConst()
                 .setName("FUFU_index")
                 .setFormula("0.1")
-                .setType("const")
-                .setFinal(false)
-                .setValueType("Natural")
-                .setAttitudeToItems("Summary")
+                .setType(CONST)
+                .setFinal(NO)
+                .setValueType(NATURAL)
+                .setAttitudeToItems(SUMMARY)
                 .setDescription("Fust/Funtel Index");
 
         CalcNode IRCSLL_index = new CalcNodeConst()
                 .setName("IRCSLL_index")
                 .setFormula("0.28")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -93,7 +107,7 @@ public class OverLoadDBController {
         CalcNode OPC_index = new CalcNodeConst()
                 .setName("OPC_index")
                 .setFormula("0.3")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -102,7 +116,7 @@ public class OverLoadDBController {
         CalcNode OPEOM = new CalcNodeConst()
                 .setName("OPEOM")
                 .setFormula("-29")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -111,7 +125,7 @@ public class OverLoadDBController {
         CalcNode OPEOO = new CalcNodeRefvar()
                 .setName("OPEOO")
                 .setFormula("0")
-                .setType("refvar")
+                .setType(REFVAR)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Every")
@@ -120,7 +134,7 @@ public class OverLoadDBController {
         CalcNode PDD_index = new CalcNodeConst()
                 .setName("PDD_index")
                 .setFormula("0.02")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -129,7 +143,7 @@ public class OverLoadDBController {
         CalcNode PEDOTF = new CalcNodeConst()
                 .setName("PEDOTF")
                 .setFormula("1")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -138,7 +152,7 @@ public class OverLoadDBController {
         CalcNode QDRN_index = new CalcNodeConst()
                 .setName("QDRN_index")
                 .setFormula("0.03")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -147,7 +161,7 @@ public class OverLoadDBController {
         CalcNode RCAPT = new CalcNodeRefvar()
                 .setName("RCAPT")
                 .setFormula("0")
-                .setType("refvar")
+                .setType(REFVAR)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Every")
@@ -156,7 +170,7 @@ public class OverLoadDBController {
         CalcNode REPIC_index = new CalcNodeConst()
                 .setName("REPIC_index")
                 .setFormula("0.0925")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -165,7 +179,7 @@ public class OverLoadDBController {
         CalcNode RJ_index = new CalcNodeConst()
                 .setName("RJ_index")
                 .setFormula("0.042")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -174,7 +188,7 @@ public class OverLoadDBController {
         CalcNode VEXTMRC = new CalcNodeRefvar()
                 .setName("VEXTMRC")
                 .setFormula("5")
-                .setType("refvar")
+                .setType(REFVAR)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Every")
@@ -183,7 +197,7 @@ public class OverLoadDBController {
         CalcNode VEXTNRC = new CalcNodeRefvar()
                 .setName("VEXTNRC")
                 .setFormula("2")
-                .setType("refvar")
+                .setType(REFVAR)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Every")
@@ -192,7 +206,7 @@ public class OverLoadDBController {
         CalcNode WACC_index = new CalcNodeConst()
                 .setName("WACC_index")
                 .setFormula("0.1767")
-                .setType("const")
+                .setType(CONST)
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
@@ -865,5 +879,10 @@ public class OverLoadDBController {
 
         List<CalcNode> finalCalcNodes = pnLCalculationService.getFinalCalcNodes();
         return new ResponseEntity<>(finalCalcNodes, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
+    public ResponseEntity setCalculationStructureToDB(@RequestBody CalculationStructure calculationStructure){
+        return new ResponseEntity<>(dbService.setCalculationStructureToDB(calculationStructure), HttpStatus.OK);
     }
 }

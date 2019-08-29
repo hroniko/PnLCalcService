@@ -3,7 +3,8 @@ package com.hroniko.pnl.rest.service;
 import com.hroniko.pnl.entity.catalog.Capex;
 import com.hroniko.pnl.entity.catalog.Opex;
 import com.hroniko.pnl.entity.nodes.CalcNode;
-import com.hroniko.pnl.entity.other.PnLCalculationNode;
+import com.hroniko.pnl.entity.other.PnLCalculationNodeResult;
+import com.hroniko.pnl.entity.other.PnLCalculationResult;
 import com.hroniko.pnl.entity.other.PriceItem;
 import com.hroniko.pnl.repo.CalcNodeRepository;
 import com.hroniko.pnl.repo.CapexRepository;
@@ -70,7 +71,7 @@ public class PnLCalculationService {
                 .collect(Collectors.toList());
     }
 
-    public List<PnLCalculationNode> calculateByQuote(Quote quote){
+    public PnLCalculationResult calculateByQuote(Quote quote){
 
         List<PriceItem> priceItems = getPriceItemsByQuote(quote);
         priceItems = priceItems.stream().filter(pi -> pi.getTotalMRC() + pi.getTotalNRC() > 0.0).collect(Collectors.toList());
@@ -109,13 +110,20 @@ public class PnLCalculationService {
                     }
                 });
 
-        return indicatorValueMap.entrySet().stream()
-                .map(x -> {
-                    PnLCalculationNode node = new PnLCalculationNode();
-                    node.setName(x.getKey());
-                    node.setValue(x.getValue().toString());
-                    return node;
-                }).collect(Collectors.toList());
+        return new PnLCalculationResult()
+                .setName("PnL Calculation Result v 0.00")
+                .setCustomerId("123")
+                .setCustomerName("Customer Oooh")
+                .setNodes(finalCalcNodes.stream()
+                        .map(fcn -> new PnLCalculationNodeResult()
+                                .setName(fcn.getDescription())
+                                .setShortName(fcn.getName())
+                                .setValue(indicatorValueMap.get(fcn.getName()).toString())
+                                .setCurrencyCode(fcn.getCurrencyCode())
+                                .setPercent(fcn.isPercent())
+                                .setMaxValue(fcn.getMaxValue())
+                                .setMinValue(fcn.getMinValue()))
+                        .collect(Collectors.toList()));
     }
 
     /* move to Helper*/

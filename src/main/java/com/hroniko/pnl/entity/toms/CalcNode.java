@@ -1,29 +1,15 @@
-package com.hroniko.pnl.entity.nodes;
+package com.hroniko.pnl.entity.toms;
 
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@NodeEntity
 public class CalcNode {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+    private BigInteger id;
     private String description;
-    private String name;
-
-    @Relationship(type = "REFERENCE", direction = Relationship.INCOMING)
+    private String Name;
     private List<CalcNode> calcNodes;
-
     private String formula;
     private String type;
     private Boolean isFinal;
@@ -32,24 +18,13 @@ public class CalcNode {
     private String attitudeToItems;
     private String minValue;
     private String maxValue;
-    private String currencyCode;
-    private boolean isPercent;
+    private BigInteger refvarAttrId;
 
-    public CalcNode() {
-        // Empty constructor required as of Neo4j API 2.0.5
-    }
-
-    /**
-     * Neo4j doesn't REALLY have bi-directional relationships. It just means when querying
-     * to ignore the direction of the relationship.
-     * https://dzone.com/articles/modelling-data-neo4j
-     */
-
-    public Long getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public CalcNode setId(Long id) {
+    public CalcNode setId(BigInteger id) {
         this.id = id;
         return this;
     }
@@ -64,11 +39,11 @@ public class CalcNode {
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public CalcNode setName(String name) {
-        this.name = name;
+        Name = name;
         return this;
     }
 
@@ -153,56 +128,35 @@ public class CalcNode {
         return this;
     }
 
-    public String getCurrencyCode() {
-        return currencyCode;
+    public BigInteger getRefvarAttrId() {
+        return refvarAttrId;
     }
 
-    public CalcNode setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
-        return this;
-    }
-
-    public boolean isPercent() {
-        return isPercent;
-    }
-
-    public CalcNode setPercent(boolean percent) {
-        isPercent = percent;
-        return this;
-    }
-
-    public CalcNode addChild(CalcNode calcNode) {
-        if (calcNodes == null) {
-            calcNodes = new ArrayList<>();
-        }
-        if (!calcNodes.contains(calcNode))
-            calcNodes.add(calcNode);
-        return this;
-    }
-
-    public CalcNode addChilds(CalcNode ... calcNodes) {
-        for (CalcNode calcNode : calcNodes){
-            addChild(calcNode);
-        }
+    public CalcNode setRefvarAttrId(BigInteger refvarAttrId) {
+        this.refvarAttrId = refvarAttrId;
         return this;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
-                .append("id", id)
-                .append("name", name)
-                .append("calcNodes", calcNodes)
-                .append("formula", formula)
-                .append("type", type)
-                .append("isFinal", isFinal)
-                .append("value", value)
-                .append("valueType", valueType)
-                .append("attitudeToItems", attitudeToItems)
-                .append("currencyCode", currencyCode)
-                .append("isPercent", isPercent)
-                .append("minValue", minValue)
-                .append("maxValue", maxValue)
-                .toString();
+        String calcNodesStr = calcNodes == null
+                ? "[null]"
+                : calcNodes.stream()
+                .map(CalcNode::getName)
+                .collect(Collectors.joining(", ", "[", "]"));
+        return "CalcNode{" +
+                "id=" + id +
+                ", Name='" + Name + '\'' +
+                ", calcNodes=" + calcNodesStr +
+                ", formula='" + formula + '\'' +
+                ", type='" + type + '\'' +
+                ", isFinal=" + isFinal +
+                ", value=" + value +
+                ", valueType=" + valueType +
+                ", attitudeToItems=" + attitudeToItems +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
+                ", refvarAttrId=" + refvarAttrId +
+                '}';
     }
 }
