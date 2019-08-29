@@ -120,7 +120,7 @@ public class OverLoadDBController {
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
-                .setDescription("Operating Expenses(Opex Monthly)");
+                .setDescription("Operating Expenses(OpexToms Monthly)");
 
         CalcNode OPEOO = new CalcNodeRefvar()
                 .setName("OPEOO")
@@ -129,7 +129,7 @@ public class OverLoadDBController {
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Every")
-                .setDescription("Operating Expenses(One time Opex)");
+                .setDescription("Operating Expenses(One time OpexToms)");
 
         CalcNode PDD_index = new CalcNodeConst()
                 .setName("PDD_index")
@@ -411,7 +411,7 @@ public class OverLoadDBController {
                 .setFinal(false)
                 .setValueType("Natural")
                 .setAttitudeToItems("Summary")
-                .setDescription("PDD Opex");
+                .setDescription("PDD OpexToms");
 
         CalcNode QDRN = new CalcNodeVar()
                 .setName("QDRN")
@@ -519,7 +519,7 @@ public class OverLoadDBController {
         TNI.addChild(RNI);
         WACC.addChild(WACC_index);
 
-        /* add Opex & Capex*/
+        /* add OpexToms & CapexToms*/
 
         Capex Fixed_Voice = new Capex()
                 .setName("Fixed Voice")

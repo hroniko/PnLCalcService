@@ -144,15 +144,21 @@ public class PnLCalculationService {
         calcNodes.stream()
                 .filter(calcNode -> "RCAPT".equals(calcNode.getName()))
                 .forEach(calcNode -> {
-                    calcNode.setFormula(capexMap.get(offerId).toString());
-                    calcNode.setValue(capexMap.get(offerId));
+                    Double value = capexMap.get(offerId);
+                    if (value != null){
+                        //calcNode.setFormula(value.toString());
+                        calcNode.setValue(value);
+                    }
                 });
 
         calcNodes.stream()
                 .filter(calcNode -> "OPEOO".equals(calcNode.getName()))
                 .forEach(calcNode -> {
-                    calcNode.setFormula(opexMap.get(offerId).toString());
-                    calcNode.setValue(opexMap.get(offerId));
+                    Double value = opexMap.get(offerId);
+                    if (value != null){
+                        //calcNode.setFormula(value.toString());
+                        calcNode.setValue(value);
+                    }
                 });
     }
 

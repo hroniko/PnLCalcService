@@ -11,8 +11,8 @@ public class CalculationStructure {
     private Date date;
     private String currencyCode;
     private List<CalcNode> calcNodes;
-    private List<Opex> opexes;
-    private List<Capex> capexes;
+    private List<OpexToms> opexes;
+    private List<CapexToms> capexes;
 
     public CalculationStructure() {
     }
@@ -53,20 +53,20 @@ public class CalculationStructure {
         return this;
     }
 
-    public List<Opex> getOpexes() {
+    public List<OpexToms> getOpexes() {
         return opexes;
     }
 
-    public CalculationStructure setOpexes(List<Opex> opexes) {
+    public CalculationStructure setOpexes(List<OpexToms> opexes) {
         this.opexes = opexes;
         return this;
     }
 
-    public List<Capex> getCapexes() {
+    public List<CapexToms> getCapexes() {
         return capexes;
     }
 
-    public CalculationStructure setCapexes(List<Capex> capexes) {
+    public CalculationStructure setCapexes(List<CapexToms> capexes) {
         this.capexes = capexes;
         return this;
     }

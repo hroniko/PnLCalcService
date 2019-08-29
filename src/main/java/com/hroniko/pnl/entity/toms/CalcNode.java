@@ -1,6 +1,9 @@
 package com.hroniko.pnl.entity.toms;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,8 +11,9 @@ import java.util.stream.Collectors;
 public class CalcNode {
     private BigInteger id;
     private String description;
-    private String Name;
+    private String name;
     private List<CalcNode> calcNodes;
+    private List<String> calcNodeNames;
     private String formula;
     private String type;
     private Boolean isFinal;
@@ -39,11 +43,11 @@ public class CalcNode {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public CalcNode setName(String name) {
-        Name = name;
+        this.name = name;
         return this;
     }
 
@@ -53,6 +57,15 @@ public class CalcNode {
 
     public CalcNode setCalcNodes(List<CalcNode> calcNodes) {
         this.calcNodes = calcNodes;
+        return this;
+    }
+
+    public List<String> getCalcNodeNames() {
+        return calcNodeNames;
+    }
+
+    public CalcNode setCalcNodeNames(List<String> calcNodeNames) {
+        this.calcNodeNames = calcNodeNames;
         return this;
     }
 
@@ -139,24 +152,19 @@ public class CalcNode {
 
     @Override
     public String toString() {
-        String calcNodesStr = calcNodes == null
-                ? "[null]"
-                : calcNodes.stream()
-                .map(CalcNode::getName)
-                .collect(Collectors.joining(", ", "[", "]"));
-        return "CalcNode{" +
-                "id=" + id +
-                ", Name='" + Name + '\'' +
-                ", calcNodes=" + calcNodesStr +
-                ", formula='" + formula + '\'' +
-                ", type='" + type + '\'' +
-                ", isFinal=" + isFinal +
-                ", value=" + value +
-                ", valueType=" + valueType +
-                ", attitudeToItems=" + attitudeToItems +
-                ", minValue=" + minValue +
-                ", maxValue=" + maxValue +
-                ", refvarAttrId=" + refvarAttrId +
-                '}';
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("calcNodeNames", calcNodeNames)
+                .append("formula", formula)
+                .append("type", type)
+                .append("isFinal", isFinal)
+                .append("value", value)
+                .append("valueType", valueType)
+                .append("attitudeToItems", attitudeToItems)
+                .append("minValue", minValue)
+                .append("maxValue", maxValue)
+                .append("refvarAttrId", refvarAttrId)
+                .toString();
     }
 }

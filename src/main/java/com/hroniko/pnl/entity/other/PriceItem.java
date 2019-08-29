@@ -19,7 +19,7 @@ public class PriceItem {
     public PriceItem(QuoteItem quoteItem) {
 
         this.totalNRC = quoteItem.getQuoteItemPrice().stream()
-                .filter(quotePrice -> "Total NRC".equals(quotePrice.getPriceType()))
+                .filter(quotePrice -> "NRC".equals(quotePrice.getPriceType()))
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)
@@ -27,7 +27,7 @@ public class PriceItem {
                 .reduce(0.0, Double::sum);
 
         this.totalMRC = quoteItem.getQuoteItemPrice().stream()
-                .filter(quotePrice -> "Total RC".equals(quotePrice.getPriceType()))
+                .filter(quotePrice -> "RC".equals(quotePrice.getPriceType()))
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)

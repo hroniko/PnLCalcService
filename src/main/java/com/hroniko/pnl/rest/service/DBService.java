@@ -8,6 +8,8 @@ import com.hroniko.pnl.entity.nodes.additional.CalcNodeFinal;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeRefvar;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeVar;
 import com.hroniko.pnl.entity.toms.CalculationStructure;
+import com.hroniko.pnl.entity.toms.CapexToms;
+import com.hroniko.pnl.entity.toms.OpexToms;
 import com.hroniko.pnl.entity.toms.UpdateDBResult;
 import com.hroniko.pnl.repo.CalcNodeRepository;
 import com.hroniko.pnl.repo.CapexRepository;
@@ -60,12 +62,16 @@ public class DBService {
         if (allCalcNodes == null) return dbResult;
 
         /* create hierarchy calc nodes */
-        allCalcNodes.forEach(calcNode -> {
-                    String formula = getFormulaFromCalcNode(calcNode);
-                    calcNode.setCalcNodes(allCalcNodes.stream()
-                            .filter(childCalcNode -> formula.contains(childCalcNode.getName()) && !childCalcNode.getName().equals(calcNode.getName()))
-                            .collect(Collectors.toList()));
+        tomsCalcNodes.forEach(tomsCalcNode -> {
+                    String parentName = tomsCalcNode.getName();
+                    List<String> childNames = tomsCalcNode.getCalcNodeNames();
+                    if (childNames == null || childNames.isEmpty()) return;
+                    CalcNode parentNode = allCalcNodes.stream().filter(pn -> parentName.equals(pn.getName())).findFirst().orElse(null);
+                    if (parentNode == null) return;
+                    List<CalcNode> childNodes = allCalcNodes.stream().filter(cn -> childNames.contains(cn.getName())).collect(Collectors.toList());
+                    parentNode.setCalcNodes(childNodes);
                 });
+
         /* clean up all calcnodes in database*/
         deleteAllCalcNodes();
         /* move all calc nodes to database */
@@ -85,7 +91,7 @@ public class DBService {
                 .setCalcNodeFinalNames(dbFinalCalcNodes.stream().map(CalcNode::getName).collect(Collectors.toList()));
 
 
-        List<com.hroniko.pnl.entity.toms.Opex> tomsOpexes = calculationStructure.getOpexes();
+        List<OpexToms> tomsOpexes = calculationStructure.getOpexes();
         List<Opex> opexes = tomsOpexes.stream()
                 .map(this::convertOpexTomsToOpex)
                 .collect(Collectors.toList());
@@ -100,7 +106,7 @@ public class DBService {
         List<Opex> dbOpexes = getAllOpex();
 
 
-        List<com.hroniko.pnl.entity.toms.Capex> tomsCapexes = calculationStructure.getCapexes();
+        List<CapexToms> tomsCapexes = calculationStructure.getCapexes();
         List<Capex> capexes = tomsCapexes.stream()
                 .map(this::convertCapexTomsToCapex)
                 .collect(Collectors.toList());
@@ -160,7 +166,7 @@ public class DBService {
                 .setDescription(tCalcNode.getDescription());
     }
 
-    private Capex convertCapexTomsToCapex(com.hroniko.pnl.entity.toms.Capex tCapex){
+    private Capex convertCapexTomsToCapex(CapexToms tCapex){
         return new Capex()
                 .setName(tCapex.getName())
                 .setDescription(tCapex.getDescription())
@@ -169,7 +175,7 @@ public class DBService {
                 .setValue(tCapex.getValue());
     }
 
-    private Opex convertOpexTomsToOpex(com.hroniko.pnl.entity.toms.Opex tOpex){
+    private Opex convertOpexTomsToOpex(OpexToms tOpex){
         return new Opex()
                 .setName(tOpex.getName())
                 .setDescription(tOpex.getDescription())

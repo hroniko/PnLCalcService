@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigInteger;
 
-public class Opex {
+public class CapexToms {
     private String name;
     private String description;
     private BigInteger offeringId;
@@ -16,7 +16,7 @@ public class Opex {
         return name;
     }
 
-    public Opex setName(String name) {
+    public CapexToms setName(String name) {
         this.name = name;
         return this;
     }
@@ -25,7 +25,7 @@ public class Opex {
         return description;
     }
 
-    public Opex setDescription(String description) {
+    public CapexToms setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -34,7 +34,7 @@ public class Opex {
         return offeringId;
     }
 
-    public Opex setOfferingId(BigInteger offeringId) {
+    public CapexToms setOfferingId(BigInteger offeringId) {
         this.offeringId = offeringId;
         return this;
     }
@@ -43,7 +43,7 @@ public class Opex {
         return offeringName;
     }
 
-    public Opex setOfferingName(String offeringName) {
+    public CapexToms setOfferingName(String offeringName) {
         this.offeringName = offeringName;
         return this;
     }
@@ -52,7 +52,7 @@ public class Opex {
         return value;
     }
 
-    public Opex setValue(Double value) {
+    public CapexToms setValue(Double value) {
         this.value = value;
         return this;
     }
