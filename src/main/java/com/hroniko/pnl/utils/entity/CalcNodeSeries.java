@@ -1,4 +1,4 @@
-package com.hroniko.pnl.utils;
+package com.hroniko.pnl.utils.entity;
 
 
 import com.hroniko.pnl.entity.nodes.CalcNode;

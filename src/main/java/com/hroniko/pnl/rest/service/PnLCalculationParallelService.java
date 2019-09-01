@@ -2,7 +2,7 @@ package com.hroniko.pnl.rest.service;
 
 import com.hroniko.pnl.entity.catalog.Capex;
 import com.hroniko.pnl.entity.catalog.Opex;
-import com.hroniko.pnl.utils.CalcNodeSeries;
+import com.hroniko.pnl.utils.entity.CalcNodeSeries;
 import com.hroniko.pnl.entity.results.PnLCalculationNodeResult;
 import com.hroniko.pnl.entity.results.PnLCalculationResult;
 import com.hroniko.pnl.entity.price.PriceItem;

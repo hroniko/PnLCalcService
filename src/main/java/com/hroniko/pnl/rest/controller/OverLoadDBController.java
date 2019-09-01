@@ -8,10 +8,7 @@ import com.hroniko.pnl.entity.nodes.additional.CalcNodeFinal;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeRefvar;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeVar;
 import com.hroniko.pnl.entity.toms.CalculationStructure;
-import com.hroniko.pnl.repo.CapexRepository;
-import com.hroniko.pnl.repo.CalcNodeRepository;
-import com.hroniko.pnl.repo.OpexRepository;
-import com.hroniko.pnl.rest.service.DBService;
+import com.hroniko.pnl.rest.service.UpdateService;
 import com.hroniko.pnl.rest.service.PnLCalculationService;
 import com.hroniko.pnl.utils.PnLHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +33,7 @@ import static com.hroniko.pnl.entity.constants.NodeValueType.*;
 public class OverLoadDBController {
 
     @Autowired
-    DBService dbService;
-
-    @Autowired
-    CalcNodeRepository calcNodeRepository;
-
-    @Autowired
-    CapexRepository capexRepository;
-
-    @Autowired
-    OpexRepository opexRepository;
+    UpdateService updateService;
 
     @Autowired
     PnLCalculationService pnLCalculationService;
@@ -55,12 +43,11 @@ public class OverLoadDBController {
 
     private static final String EMPTY = "";
 
+    /* only for test TODO remove it!*/
     @RequestMapping(value = {"/restart"}, method = RequestMethod.GET)
     public ResponseEntity restartDB(HttpServletRequest request){
 
-        calcNodeRepository.deleteAll();
-        capexRepository.deleteAll();
-        opexRepository.deleteAll();
+        pnLHelper.clearRepository();
 
         CalcNode CH_index = new CalcNode()
                 .setName("CH_index")
@@ -530,7 +517,7 @@ public class OverLoadDBController {
                 .setOfferingName("SmartVoice")
                 .setValue(17.14)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Fixed_Voice);
+        pnLHelper.saveCapexes(Fixed_Voice);
 
         Capex MPLS_VPN = new Capex()
                 .setName("MPLS VPN")
@@ -538,7 +525,7 @@ public class OverLoadDBController {
                 .setOfferingName("MPLS VPN")
                 .setValue(111.00)
                 .setDescription("");
-        capexRepository.save(MPLS_VPN);
+        pnLHelper.saveCapexes(MPLS_VPN);
 
         Capex Mobile_Plan_L = new Capex()
                 .setName("Mobile Plan L")
@@ -546,7 +533,7 @@ public class OverLoadDBController {
                 .setOfferingName("Mobile Plan Advanced")
                 .setValue(0.00)
                 .setDescription("");
-        capexRepository.save(Mobile_Plan_L);
+        pnLHelper.saveCapexes(Mobile_Plan_L);
 
         Capex TV_Digital = new Capex()
                 .setName("TV Digital")
@@ -554,7 +541,7 @@ public class OverLoadDBController {
                 .setOfferingName("Digital TV Select")
                 .setValue(11.42)
                 .setDescription("");
-        capexRepository.save(TV_Digital);
+        pnLHelper.saveCapexes(TV_Digital);
 
         Capex Fixed_Voice_Dect_Phone = new Capex()
                 .setName("[Fixed Voice] Dect Phone")
@@ -562,7 +549,7 @@ public class OverLoadDBController {
                 .setOfferingName("Polycom VVX 400")
                 .setValue(14.28)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Fixed_Voice_Dect_Phone);
+        pnLHelper.saveCapexes(Fixed_Voice_Dect_Phone);
 
         Capex Fixed_Voice_Fixed_Line = new Capex()
                 .setName("[Fixed Voice] Fixed Line")
@@ -570,7 +557,7 @@ public class OverLoadDBController {
                 .setOfferingName("Polycom VVX 500")
                 .setValue(14.28)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Fixed_Voice_Fixed_Line);
+        pnLHelper.saveCapexes(Fixed_Voice_Fixed_Line);
 
         Capex Fixed_Voice_Installation = new Capex()
                 .setName("[Fixed Voice] Installation")
@@ -578,7 +565,7 @@ public class OverLoadDBController {
                 .setOfferingName("Installation")
                 .setValue(15.71)
                 .setDescription("");
-        capexRepository.save(Fixed_Voice_Installation);
+        pnLHelper.saveCapexes(Fixed_Voice_Installation);
 
         Capex MPLS_Cisco_Meraki_MR30H = new Capex()
                 .setName("[MPLS] Cisco Meraki MR30H")
@@ -586,7 +573,7 @@ public class OverLoadDBController {
                 .setOfferingName("Cisco Meraki MR30H")
                 .setValue(187.00)
                 .setDescription("");
-        capexRepository.save(MPLS_Cisco_Meraki_MR30H);
+        pnLHelper.saveCapexes(MPLS_Cisco_Meraki_MR30H);
 
         Capex MPLS_Redundancy_per_Device = new Capex()
                 .setName("[MPLS] Redundancy (per Device)")
@@ -594,7 +581,7 @@ public class OverLoadDBController {
                 .setOfferingName("Redundancy (per Device)")
                 .setValue(7.50)
                 .setDescription("");
-        capexRepository.save(MPLS_Redundancy_per_Device);
+        pnLHelper.saveCapexes(MPLS_Redundancy_per_Device);
 
         Capex Mobile_Plan_L_iPhone_6s = new Capex()
                 .setName("[Mobile Plan L] iPhone 6s")
@@ -602,7 +589,7 @@ public class OverLoadDBController {
                 .setOfferingName("Apple iPhone 6s")
                 .setValue(2.85)
                 .setDescription("");
-        capexRepository.save(Mobile_Plan_L_iPhone_6s);
+        pnLHelper.saveCapexes(Mobile_Plan_L_iPhone_6s);
 
         Capex TV_Installation = new Capex()
                 .setName("[TV] Installation")
@@ -610,7 +597,7 @@ public class OverLoadDBController {
                 .setOfferingName("Installation")
                 .setValue(14.28)
                 .setDescription("");
-        capexRepository.save(TV_Installation);
+        pnLHelper.saveCapexes(TV_Installation);
 
         Capex Voice_Auto_Attendant = new Capex()
                 .setName("[Voice] Auto Attendant")
@@ -618,7 +605,7 @@ public class OverLoadDBController {
                 .setOfferingName("Auto Attendant")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Auto_Attendant);
+        pnLHelper.saveCapexes(Voice_Auto_Attendant);
 
         Capex Voice_Call_Queuing = new Capex()
                 .setName("[Voice] Call Queuing")
@@ -626,7 +613,7 @@ public class OverLoadDBController {
                 .setOfferingName("Call Queuing")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Call_Queuing);
+        pnLHelper.saveCapexes(Voice_Call_Queuing);
 
         Capex Voice_Call_Recording = new Capex()
                 .setName("[Voice] Call Recording")
@@ -634,7 +621,7 @@ public class OverLoadDBController {
                 .setOfferingName("Call Recording")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Call_Recording);
+        pnLHelper.saveCapexes(Voice_Call_Recording);
 
         Capex Voice_Multi_Conference = new Capex()
                 .setName("[Voice] Multi Conference")
@@ -642,7 +629,7 @@ public class OverLoadDBController {
                 .setOfferingName("Multi Conference")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Multi_Conference);
+        pnLHelper.saveCapexes(Voice_Multi_Conference);
 
         Capex Voice_On_Hold_Messaging = new Capex()
                 .setName("[Voice] On Hold Messaging")
@@ -650,7 +637,7 @@ public class OverLoadDBController {
                 .setOfferingName("On Hold Messaging")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_On_Hold_Messaging);
+        pnLHelper.saveCapexes(Voice_On_Hold_Messaging);
 
         Capex Voice_Reception_Console = new Capex()
                 .setName("[Voice] Reception Console")
@@ -658,7 +645,7 @@ public class OverLoadDBController {
                 .setOfferingName("Reception Console")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Reception_Console);
+        pnLHelper.saveCapexes(Voice_Reception_Console);
 
         Capex Voice_Video_Conferencing = new Capex()
                 .setName("[Voice] Video Conferencing")
@@ -666,7 +653,7 @@ public class OverLoadDBController {
                 .setOfferingName("Video Conferencing")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Video_Conferencing);
+        pnLHelper.saveCapexes(Voice_Video_Conferencing);
 
         Capex Voice_Voicemail_to_Email = new Capex()
                 .setName("[Voice] Voicemail to Email")
@@ -674,7 +661,7 @@ public class OverLoadDBController {
                 .setOfferingName("Voicemail to Email")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        capexRepository.save(Voice_Voicemail_to_Email);
+        pnLHelper.saveCapexes(Voice_Voicemail_to_Email);
 
 
         /* OPEX */
@@ -684,7 +671,7 @@ public class OverLoadDBController {
                 .setOfferingName("SmartVoice")
                 .setValue(27.14)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Fixed_Voice);
+        pnLHelper.saveOpexes(o_Fixed_Voice);
 
         Opex o_Fixed_Voice_Dect_Phone = new Opex()
                 .setName("[Fixed Voice] Dect Phone")
@@ -692,7 +679,7 @@ public class OverLoadDBController {
                 .setOfferingName("Polycom VVX 400")
                 .setValue(25.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Fixed_Voice_Dect_Phone);
+        pnLHelper.saveOpexes(o_Fixed_Voice_Dect_Phone);
 
         Opex o_Fixed_Voice_Installation = new Opex()
                 .setName("[Fixed Voice] Installation")
@@ -700,7 +687,7 @@ public class OverLoadDBController {
                 .setOfferingName("Installation")
                 .setValue(30.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Fixed_Voice_Installation);
+        pnLHelper.saveOpexes(o_Fixed_Voice_Installation);
 
         Opex o_Fixed_Voice_Fixed_Line = new Opex()
                 .setName("[Fixed Voice] Fixed Line")
@@ -708,7 +695,7 @@ public class OverLoadDBController {
                 .setOfferingName("Polycom VVX 500")
                 .setValue(17.14)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Fixed_Voice_Fixed_Line);
+        pnLHelper.saveOpexes(o_Fixed_Voice_Fixed_Line);
 
         Opex o_MPLS_VPN = new Opex()
                 .setName("[MPLS VPN]")
@@ -716,7 +703,7 @@ public class OverLoadDBController {
                 .setOfferingName("MPLS VPN")
                 .setValue(71.42)
                 .setDescription("");
-        opexRepository.save(o_MPLS_VPN);
+        pnLHelper.saveOpexes(o_MPLS_VPN);
 
         Opex o_MPLS_VPN_Cisco_Meraki_MR30H = new Opex()
                 .setName("[MPLS] Cisco Meraki MR30H")
@@ -724,7 +711,7 @@ public class OverLoadDBController {
                 .setOfferingName("Cisco Meraki MR30H")
                 .setValue(71.42)
                 .setDescription("");
-        opexRepository.save(o_MPLS_VPN_Cisco_Meraki_MR30H);
+        pnLHelper.saveOpexes(o_MPLS_VPN_Cisco_Meraki_MR30H);
 
         Opex o_Mobile_Plan_L = new Opex()
                 .setName("[Mobile Plan L]")
@@ -732,7 +719,7 @@ public class OverLoadDBController {
                 .setOfferingName("Mobile Plan Advanced")
                 .setValue(35.71)
                 .setDescription("");
-        opexRepository.save(o_Mobile_Plan_L);
+        pnLHelper.saveOpexes(o_Mobile_Plan_L);
 
         Opex o_Mobile_Plan_L_iPhone_6s = new Opex()
                 .setName("[Mobile Plan L]")
@@ -740,7 +727,7 @@ public class OverLoadDBController {
                 .setOfferingName("Apple iPhone 6s")
                 .setValue(1.42)
                 .setDescription("");
-        opexRepository.save(o_Mobile_Plan_L_iPhone_6s);
+        pnLHelper.saveOpexes(o_Mobile_Plan_L_iPhone_6s);
 
         Opex o_TV_Digital = new Opex()
                 .setName("[TV Digital]")
@@ -748,7 +735,7 @@ public class OverLoadDBController {
                 .setOfferingName("Digital TV Select")
                 .setValue(14.28)
                 .setDescription("");
-        opexRepository.save(o_TV_Digital);
+        pnLHelper.saveOpexes(o_TV_Digital);
 
         Opex o_TV_Digital_Installation = new Opex()
                 .setName("[TV Digital] Installation")
@@ -756,7 +743,7 @@ public class OverLoadDBController {
                 .setOfferingName("Installation")
                 .setValue(30.00)
                 .setDescription("");
-        opexRepository.save(o_TV_Digital_Installation);
+        pnLHelper.saveOpexes(o_TV_Digital_Installation);
 
         Opex o_TV_Digital_STB = new Opex()
                 .setName("[TV Digital] STB")
@@ -764,7 +751,7 @@ public class OverLoadDBController {
                 .setOfferingName("STB")
                 .setValue(7.14)
                 .setDescription("");
-        opexRepository.save(o_TV_Digital_STB);
+        pnLHelper.saveOpexes(o_TV_Digital_STB);
 
         Opex o_Voice_Auto_Attendant = new Opex()
                 .setName("[Voice] Auto Attendant")
@@ -772,7 +759,7 @@ public class OverLoadDBController {
                 .setOfferingName("Auto Attendant")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Auto_Attendant);
+        pnLHelper.saveOpexes(o_Voice_Auto_Attendant);
 
         Opex o_Voice_Call_Queuing = new Opex()
                 .setName("[Voice] Call Queuing")
@@ -780,7 +767,7 @@ public class OverLoadDBController {
                 .setOfferingName("Call Queuing")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Call_Queuing);
+        pnLHelper.saveOpexes(o_Voice_Call_Queuing);
 
         Opex o_Voice_Call_Recording = new Opex()
                 .setName("[Voice] Call Recording")
@@ -788,7 +775,7 @@ public class OverLoadDBController {
                 .setOfferingName("Call Recordin")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Call_Recording);
+        pnLHelper.saveOpexes(o_Voice_Call_Recording);
 
         Opex o_Voice_Multi_Conference = new Opex()
                 .setName("[Voice] Multi Conference")
@@ -796,7 +783,7 @@ public class OverLoadDBController {
                 .setOfferingName("Multi Conference")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Multi_Conference);
+        pnLHelper.saveOpexes(o_Voice_Multi_Conference);
 
         Opex o_Voice_On_Hold_Messaginge = new Opex()
                 .setName("[Voice] On Hold Messaging")
@@ -804,7 +791,7 @@ public class OverLoadDBController {
                 .setOfferingName("On Hold Messaging")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_On_Hold_Messaginge);
+        pnLHelper.saveOpexes(o_Voice_On_Hold_Messaginge);
 
         Opex o_Voice_Reception_Console = new Opex()
                 .setName("[Voice] Reception Console")
@@ -812,7 +799,7 @@ public class OverLoadDBController {
                 .setOfferingName("Reception Console")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Reception_Console);
+        pnLHelper.saveOpexes(o_Voice_Reception_Console);
 
         Opex o_Voice_Video_Conferencing = new Opex()
                 .setName("[Voice] Video Conferencing")
@@ -820,7 +807,7 @@ public class OverLoadDBController {
                 .setOfferingName("Video Conferencing")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voice_Video_Conferencing);
+        pnLHelper.saveOpexes(o_Voice_Video_Conferencing);
 
         Opex o_Voicemail_to_Email= new Opex()
                 .setName("[Voice] Voicemail to Email")
@@ -828,57 +815,58 @@ public class OverLoadDBController {
                 .setOfferingName("Voicemail to Email")
                 .setValue(0.00)
                 .setDescription("Shaw Voice");
-        opexRepository.save(o_Voicemail_to_Email);
+        pnLHelper.saveOpexes(o_Voicemail_to_Email);
 
         /*    */
 
-        calcNodeRepository.save(CH_index);
-        calcNodeRepository.save(Capex_Depreciation_index);
-        calcNodeRepository.save(DEXT);
-        calcNodeRepository.save(FUFU_index);
-        calcNodeRepository.save(IRCSLL_index);
-        calcNodeRepository.save(OPC_index);
-        calcNodeRepository.save(OPEOM);
-        calcNodeRepository.save(OPEOO);
-        calcNodeRepository.save(PDD_index);
-        calcNodeRepository.save(PEDOTF);
-        calcNodeRepository.save(QDRN_index);
-        calcNodeRepository.save(RCAPT);
-        calcNodeRepository.save(REPIC_index);
-        calcNodeRepository.save(RJ_index);
-        calcNodeRepository.save(VEXTMRC);
-        calcNodeRepository.save(VEXTNRC);
-        calcNodeRepository.save(WACC_index);
-        calcNodeRepository.save(AFCF);
-        calcNodeRepository.save(CAPT);
-        calcNodeRepository.save(CH);
-        calcNodeRepository.save(Depreciation);
-        calcNodeRepository.save(EBIT);
-        calcNodeRepository.save(EBITDA);
-        calcNodeRepository.save(FCF);
-        calcNodeRepository.save(FUFU);
-        calcNodeRepository.save(IRCSLL);
-        calcNodeRepository.save(IRR);
-        calcNodeRepository.save(MEBITDA);
-        calcNodeRepository.save(NI);
-        calcNodeRepository.save(NMRC);
-        calcNodeRepository.save(NMargin);
-        calcNodeRepository.save(NNRC);
-        calcNodeRepository.save(NPV);
-        calcNodeRepository.save(NProfit);
-        calcNodeRepository.save(NRRJ);
-        calcNodeRepository.save(OP);
-        calcNodeRepository.save(OPC);
-        calcNodeRepository.save(OPT);
-        calcNodeRepository.save(PDDOP);
-        calcNodeRepository.save(QDRN);
-        calcNodeRepository.save(REPIC);
-        calcNodeRepository.save(RJN);
-        calcNodeRepository.save(RJOP);
-        calcNodeRepository.save(RNI);
-        calcNodeRepository.save(ROPT);
-        calcNodeRepository.save(TNI);
-        calcNodeRepository.save(WACC);
+        pnLHelper.saveCalcNodes(CH_index,
+                Capex_Depreciation_index,
+                DEXT,
+                FUFU_index,
+                IRCSLL_index,
+                OPC_index,
+                OPEOM,
+                OPEOO,
+                PDD_index,
+                PEDOTF,
+                QDRN_index,
+                RCAPT,
+                REPIC_index,
+                RJ_index,
+                VEXTMRC,
+                VEXTNRC,
+                WACC_index,
+                AFCF,
+                CAPT,
+                CH,
+                Depreciation,
+                EBIT,
+                EBITDA,
+                FCF,
+                FUFU,
+                IRCSLL,
+                IRR,
+                MEBITDA,
+                NI,
+                NMRC,
+                NMargin,
+                NNRC,
+                NPV,
+                NProfit,
+                NRRJ,
+                OP,
+                OPC,
+                OPT,
+                PDDOP,
+                QDRN,
+                REPIC,
+                RJN,
+                RJOP,
+                RNI,
+                ROPT,
+                TNI,
+                WACC
+                );
 
         List<CalcNode> finalCalcNodes = pnLHelper.getFinalCalcNodes();
         return new ResponseEntity<>(finalCalcNodes, HttpStatus.OK);
@@ -886,6 +874,6 @@ public class OverLoadDBController {
 
     @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
     public ResponseEntity setCalculationStructureToDB(@RequestBody CalculationStructure calculationStructure){
-        return new ResponseEntity<>(dbService.setCalculationStructureToDB(calculationStructure), HttpStatus.OK);
+        return new ResponseEntity<>(updateService.setCalculationStructureToDB(calculationStructure), HttpStatus.OK);
     }
 }
