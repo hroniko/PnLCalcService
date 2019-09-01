@@ -1,4 +1,4 @@
-package com.hroniko.pnl.entity.other;
+package com.hroniko.pnl.entity.price;
 
 import com.netcracker.tbapi.datamodel.tmf.oe.price.Price;
 import com.netcracker.tbapi.datamodel.tmf.quote.QuoteItem;

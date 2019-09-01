@@ -3,12 +3,9 @@ package com.hroniko.pnl.rest.service;
 import com.hroniko.pnl.entity.catalog.Capex;
 import com.hroniko.pnl.entity.catalog.Opex;
 import com.hroniko.pnl.entity.nodes.CalcNode;
-import com.hroniko.pnl.entity.other.PnLCalculationNodeResult;
-import com.hroniko.pnl.entity.other.PnLCalculationResult;
-import com.hroniko.pnl.entity.other.PriceItem;
-import com.hroniko.pnl.repo.CalcNodeRepository;
-import com.hroniko.pnl.repo.CapexRepository;
-import com.hroniko.pnl.repo.OpexRepository;
+import com.hroniko.pnl.entity.results.PnLCalculationNodeResult;
+import com.hroniko.pnl.entity.results.PnLCalculationResult;
+import com.hroniko.pnl.entity.price.PriceItem;
 import com.hroniko.pnl.utils.PnLHelper;
 import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import net.objecthunter.exp4j.Expression;
@@ -24,59 +21,14 @@ import java.util.stream.Collectors;
 public class PnLCalculationService {
 
     @Autowired
-    CalcNodeRepository calcNodeRepository;
-
-    @Autowired
-    CapexRepository capexRepository;
-
-    @Autowired
-    OpexRepository opexRepository;
-
-    @Autowired
     PnLHelper pnLHelper;
-
-
-    /* move to Helper*/
-    public List<CalcNode> getAllCalcNodes(){
-        List<CalcNode> allCalcNodes = new ArrayList<>();
-        calcNodeRepository.findAll().forEach(allCalcNodes::add);
-        return allCalcNodes;
-    }
-
-    /* move to Helper*/
-    public List<CalcNode> getFinalCalcNodes(){
-        return getAllCalcNodes().stream()
-                .filter(CalcNode::getFinal)
-                .collect(Collectors.toList());
-    }
-
-    /* move to Helper*/
-    public List<Capex> getAllCapex(){
-        List<Capex> capexList = new ArrayList<>();
-        capexRepository.findAll().forEach(capexList::add);
-        return capexList;
-    }
-
-    /* move to Helper*/
-    public List<Opex> getAllOpex(){
-        List<Opex> opexList = new ArrayList<>();
-        opexRepository.findAll().forEach(opexList::add);
-        return opexList;
-    }
-
-    /* move to Helper*/
-    private List<PriceItem> getPriceItemsByQuote(Quote quote){
-        return quote.getQuoteItem().stream()
-                .map(PriceItem::new)
-                .collect(Collectors.toList());
-    }
 
     public PnLCalculationResult calculateByQuote(Quote quote){
 
-        List<PriceItem> priceItems = getPriceItemsByQuote(quote);
+        List<PriceItem> priceItems = pnLHelper.getPriceItemsByQuote(quote);
         priceItems = priceItems.stream().filter(pi -> pi.getTotalMRC() + pi.getTotalNRC() > 0.0).collect(Collectors.toList());
 
-        List<CalcNode> allCalcNodes = getAllCalcNodes();
+        List<CalcNode> allCalcNodes = pnLHelper.getAllCalcNodes();
         List<CalcNode> finalCalcNodes = allCalcNodes.stream()
                 .filter(CalcNode::getFinal)
                 .collect(Collectors.toList());
@@ -128,8 +80,8 @@ public class PnLCalculationService {
 
     /* move to Helper*/
     private void enrichByPexCatalog(List<CalcNode> calcNodes, BigInteger offerId){
-        List<Capex> capexList = getAllCapex();
-        List<Opex> opexList = getAllOpex();
+        List<Capex> capexList = pnLHelper.getAllCapex();
+        List<Opex> opexList = pnLHelper.getAllOpex();
 
         Map<BigInteger, Double> capexMap = capexList == null
                 ? new HashMap<>()
@@ -280,8 +232,5 @@ public class PnLCalculationService {
             }
         }
     }
-
-
-
 
 }

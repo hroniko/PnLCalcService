@@ -13,7 +13,7 @@ import com.hroniko.pnl.repo.CalcNodeRepository;
 import com.hroniko.pnl.repo.OpexRepository;
 import com.hroniko.pnl.rest.service.DBService;
 import com.hroniko.pnl.rest.service.PnLCalculationService;
-import com.netcracker.tbapi.services.common.order.QuoteSalesOrderData;
+import com.hroniko.pnl.utils.PnLHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +49,9 @@ public class OverLoadDBController {
 
     @Autowired
     PnLCalculationService pnLCalculationService;
+
+    @Autowired
+    PnLHelper pnLHelper;
 
     private static final String EMPTY = "";
 
@@ -877,7 +880,7 @@ public class OverLoadDBController {
         calcNodeRepository.save(TNI);
         calcNodeRepository.save(WACC);
 
-        List<CalcNode> finalCalcNodes = pnLCalculationService.getFinalCalcNodes();
+        List<CalcNode> finalCalcNodes = pnLHelper.getFinalCalcNodes();
         return new ResponseEntity<>(finalCalcNodes, HttpStatus.OK);
     }
 

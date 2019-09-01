@@ -1,0 +1,170 @@
+package com.hroniko.pnl.rest.service;
+
+import com.hroniko.pnl.entity.catalog.Capex;
+import com.hroniko.pnl.entity.catalog.Opex;
+import com.hroniko.pnl.utils.CalcNodeSeries;
+import com.hroniko.pnl.entity.results.PnLCalculationNodeResult;
+import com.hroniko.pnl.entity.results.PnLCalculationResult;
+import com.hroniko.pnl.entity.price.PriceItem;
+import com.hroniko.pnl.utils.PnLHelper;
+import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigInteger;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+public class PnLCalculationParallelService {
+
+    @Autowired
+    PnLHelper pnLHelper;
+
+    public PnLCalculationResult calculateByQuote(Quote quote){
+
+        List<PriceItem> priceItems = pnLHelper.getPriceItemsByQuote(quote);
+        List<CalcNodeSeries> finalCalcNodes = pnLHelper.getFinalCalcNodeSeries();
+        recalculateNodeValues(finalCalcNodes, priceItems);
+
+        return new PnLCalculationResult()
+                .setName("PnL Calculation Result v 0.00") // TODO set generate result name
+                .setCustomerId("123") // TODO set customer id
+                .setCustomerName("Customer Test") // TODO set customer name
+                .setNodes(finalCalcNodes.stream()
+                        .map(fcn -> new PnLCalculationNodeResult()
+                                .setName(fcn.getDescription())
+                                .setShortName(fcn.getName())
+                                .setValue(fcn.getValue().toString())
+                                .setCurrencyCode(fcn.getCurrencyCode())
+                                .setPercent(fcn.isPercent())
+                                .setMaxValue(fcn.getMaxValue())
+                                .setMinValue(fcn.getMinValue()))
+                        .collect(Collectors.toList()));
+    }
+
+    private Map<BigInteger, Double> getOferingToOpexMap(){
+        List<Opex> opexes = pnLHelper.getAllOpex();
+        return opexes == null
+                ? new HashMap<>()
+                : opexes.stream().collect(
+                Collectors.toMap(Opex::getOfferingId, Opex::getValue));
+    }
+
+    private Map<BigInteger, Double> getOferingToCapexMap(){
+        List<Capex> capexes = pnLHelper.getAllCapex();
+        return capexes == null
+                ? new HashMap<>()
+                : capexes.stream().collect(
+                Collectors.toMap(Capex::getOfferingId, Capex::getValue));
+    }
+
+
+    public void recalculateNodeValues(List<CalcNodeSeries> calcNodes, List<PriceItem> priceItems){
+        Map<BigInteger, Double> offeringToCapexMap = getOferingToCapexMap();
+        Map<BigInteger, Double> offeringToOpexMap = getOferingToOpexMap();
+        calcNodes.forEach(calcNode -> recalculateValues(calcNode, priceItems, offeringToCapexMap, offeringToOpexMap ));
+    }
+
+
+    private void recalculateValues(CalcNodeSeries parent,
+                                   List<PriceItem> priceItems,
+                                   Map<BigInteger, Double> capexMap,
+                                   Map<BigInteger, Double> opexMap){
+
+        if (parent == null) return;
+        List<CalcNodeSeries> childs = parent.getCalcNodes();
+        if (childs == null) childs = new ArrayList<>();
+
+        for (CalcNodeSeries child : childs) {
+            if (child.getValue() == null) recalculateValues(child, priceItems, capexMap, opexMap);
+        }
+
+        if (parent.getValue() != null) return;
+
+        /* Enrich by PEX catalog */
+        if ("RCAPT".equals(parent.getName())){
+            parent.setValues(priceItems.stream()
+                    .map(priceItem -> capexMap.get(priceItem.getOfferingId()))
+                    .map(value -> value == null ? 0.0 : value)
+                    .collect(Collectors.toList()));
+        }
+        if ("OPEOO".equals(parent.getName())){
+            parent.setValues(priceItems.stream()
+                    .map(priceItem -> opexMap.get(priceItem.getOfferingId()))
+                    .map(value -> value == null ? 0.0 : value)
+                    .collect(Collectors.toList()));
+        }
+
+        /* Enrich by price */
+        if ("VEXTMRC".equals(parent.getName())){
+            parent.setValues(priceItems.stream()
+                    .map(PriceItem::getTotalMRC)
+                    .collect(Collectors.toList()));
+        }
+        if ("VEXTNRC".equals(parent.getName())){
+            parent.setValues(priceItems.stream()
+                    .map(PriceItem::getTotalNRC)
+                    .collect(Collectors.toList()));
+        }
+
+        if (parent.getValues().isEmpty()){
+            for (int i = 0; i < priceItems.size(); i++){
+                Double value = culculateValue(parent, childs, i);
+                parent.addValueToValues(value);
+            }
+        }
+
+        /* if type != const, accumulate value */
+        if (!"const".equals(parent.getType())) {
+            List<Double> values = parent.getValues();
+            parent.setValue(values.stream().reduce(0.0, Double::sum));
+        }
+
+        /* check summary or every calculate */
+        if ( parent.getFinal() && "Summary".equals(parent.getAttitudeToItems())){
+            Double value = culculateValue(parent, childs, null);
+            parent.setValue(value);
+        }
+
+        /* mix fix */
+        if (parent.getValue() == null)
+            parent.setValue(parent.getValues().get(0));
+
+    }
+
+    private Double culculateValue(CalcNodeSeries parent, List<CalcNodeSeries> childList, Integer pos){ // if pos = null or -1, calculate as single mode -> as Summary value
+        String formula = getFormulaFromCalcNode(parent);
+        Set<String> variables = new HashSet<>();
+        Map<String, Double> variableValues = new HashMap<>();
+        for (CalcNodeSeries calcNode : childList) {
+            String name = calcNode.getName().trim();
+            Double value;
+            if (pos == null || pos < 0){
+                value = calcNode.getValue();
+            } else {
+                value = calcNode.getValueFromValues(pos);
+            }
+            variables.add(name);
+            variableValues.put(name, value);
+        }
+        Expression expression = new ExpressionBuilder(formula)
+                .variables(variables)
+                .build()
+                .setVariables(variableValues);
+        Double value = expression.evaluate();
+        return value;
+    }
+
+    private String getFormulaFromCalcNode(CalcNodeSeries calcNodeResult) {
+        String formula = calcNodeResult.getFormula();
+        if (formula.contains("=")) {
+            String[] partFormula = formula.split("=");
+            formula = partFormula[partFormula.length - 1];
+        }
+        return formula;
+    }
+
+}
