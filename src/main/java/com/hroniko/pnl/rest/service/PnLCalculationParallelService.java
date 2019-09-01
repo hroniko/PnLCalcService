@@ -122,7 +122,7 @@ public class PnLCalculationParallelService {
 
         if (parent.getValues().isEmpty()){
             for (int i = 0; i < priceItems.size(); i++){
-                Double value = culculateValue(parent, childs, i);
+                Double value = calculateValue(parent, childs, i);
                 parent.addValueToValues(value);
             }
         }
@@ -135,7 +135,7 @@ public class PnLCalculationParallelService {
 
         /* check summary or every calculate */
         if ( parent.getFinal() && SUMMARY.equals(parent.getAttitudeToItems())){
-            Double value = culculateValue(parent, childs, null);
+            Double value = calculateValue(parent, childs, null);
             parent.setValue(value);
         }
 
@@ -145,9 +145,9 @@ public class PnLCalculationParallelService {
 
     }
 
-    private Double culculateValue(CalcNodeSeries parent, List<CalcNodeSeries> childList, Integer pos){
+    private Double calculateValue(CalcNodeSeries parent, List<CalcNodeSeries> childList, Integer pos){
         // if pos = null or -1, calculate as single mode -> as Summary value
-        String formula = getFormulaFromCalcNode(parent);
+        String formula = pnLHelper.getFormulaFromCalcNode(parent);
         Set<String> variables = new HashSet<>();
         Map<String, Double> variableValues = new HashMap<>();
         for (CalcNodeSeries calcNode : childList) {
@@ -165,17 +165,8 @@ public class PnLCalculationParallelService {
                 .variables(variables)
                 .build()
                 .setVariables(variableValues);
-        Double value = expression.evaluate();
-        return value;
-    }
 
-    private String getFormulaFromCalcNode(CalcNodeSeries calcNodeResult) {
-        String formula = calcNodeResult.getFormula();
-        if (formula.contains("=")) {
-            String[] partFormula = formula.split("=");
-            formula = partFormula[partFormula.length - 1];
-        }
-        return formula;
+        return expression.evaluate();
     }
 
 }

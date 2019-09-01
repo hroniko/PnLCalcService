@@ -125,4 +125,20 @@ public class PnLHelper {
         }
     }
 
+    public String getFormulaFromCalcNode(CalcNode calcNodeResult) {
+        return getFormulaFromCalcNode(calcNodeResult.getFormula());
+    }
+
+    public String getFormulaFromCalcNode(CalcNodeSeries calcNodeResult) {
+        return getFormulaFromCalcNode(calcNodeResult.getFormula());
+    }
+
+    public String getFormulaFromCalcNode(String formula){
+        if (formula.contains("=")) {
+            String[] partFormula = formula.split("=");
+            formula = partFormula[partFormula.length - 1];
+        }
+        return formula;
+    }
+
 }

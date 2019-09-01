@@ -147,7 +147,7 @@ public class PnLCalculationService {
         }
 
         if (parent.getValue() != null) return;
-        String formula = getFormulaFromCalcNode(parent);
+        String formula = pnLHelper.getFormulaFromCalcNode(parent);
         Set<String> variables = new HashSet<>();
         Map<String, Double> variableValues = new HashMap<>();
         childs.forEach(calcNode -> {
@@ -166,7 +166,7 @@ public class PnLCalculationService {
     }
 
     public Double recalculateSummaryResult(Map<String, Double> allValueMap, CalcNode calcNodeResult) {
-        String formula = getFormulaFromCalcNode(calcNodeResult);
+        String formula = pnLHelper.getFormulaFromCalcNode(calcNodeResult);
 
         Set<String> variables = new HashSet<>();
         Map<String, Double> variableValues = new HashMap<>();
@@ -188,14 +188,7 @@ public class PnLCalculationService {
         return expression.evaluate();
     }
 
-    private String getFormulaFromCalcNode(CalcNode calcNodeResult) {
-        String formula = calcNodeResult.getFormula();
-        if (formula.contains("=")) {
-            String[] partFormula = formula.split("=");
-            formula = partFormula[partFormula.length - 1];
-        }
-        return formula;
-    }
+
 
     public void clearValues(List<CalcNode> calcNodes){
         calcNodes.forEach(this::clearValues);
