@@ -6,7 +6,7 @@ import com.hroniko.pnl.entity.nodes.CalcNode;
 import com.hroniko.pnl.entity.toms.CalculationStructure;
 import com.hroniko.pnl.entity.toms.CapexToms;
 import com.hroniko.pnl.entity.toms.OpexToms;
-import com.hroniko.pnl.entity.toms.UpdateDBResult;
+import com.hroniko.pnl.entity.results.UpdateDBResult;
 import com.hroniko.pnl.utils.PnLHelper;
 import com.hroniko.pnl.utils.converters.TomsConverter;
 import org.springframework.beans.factory.annotation.Autowired;
