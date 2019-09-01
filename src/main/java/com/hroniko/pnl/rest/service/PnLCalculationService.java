@@ -17,6 +17,8 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.hroniko.pnl.entity.constants.AttitudeToItems.SUMMARY;
+
 @Service
 public class PnLCalculationService {
 
@@ -52,7 +54,7 @@ public class PnLCalculationService {
 
         // secondary calculate for Attitude to Items in "Summary" status:
         allCalcNodes.stream()
-                .filter(cn -> "Summary".equals(cn.getAttitudeToItems()))
+                .filter(cn -> SUMMARY.equals(cn.getAttitudeToItems()))
                 .forEach(calcNodeSummary -> {
                     String name = calcNodeSummary.getName();
                     if (indicatorValueMap.containsKey(name)) {
@@ -78,7 +80,6 @@ public class PnLCalculationService {
                         .collect(Collectors.toList()));
     }
 
-    /* move to Helper*/
     private void enrichByPexCatalog(List<CalcNode> calcNodes, BigInteger offerId){
         List<Capex> capexList = pnLHelper.getAllCapex();
         List<Opex> opexList = pnLHelper.getAllOpex();
@@ -114,7 +115,6 @@ public class PnLCalculationService {
                 });
     }
 
-    /* move to Helper*/
     private void enrichByPrice(List<CalcNode> calcNodes, PriceItem priceItem){
 
         calcNodes.stream()

@@ -28,7 +28,6 @@ public class PnLHelper {
     @Autowired
     OpexRepository opexRepository;
 
-    /* move to Helper*/
     public List<CalcNode> getAllCalcNodes(){
         List<CalcNode> allCalcNodes = new ArrayList<>();
         calcNodeRepository.findAll().forEach(allCalcNodes::add);
@@ -39,7 +38,6 @@ public class PnLHelper {
         return getAllCalcNodes().stream().map(CalcNodeSeries::new).collect(Collectors.toList());
     }
 
-    /* move to Helper*/
     public List<CalcNode> getFinalCalcNodes(){
         return getAllCalcNodes().stream()
                 .filter(CalcNode::getFinal)
@@ -52,21 +50,18 @@ public class PnLHelper {
                 .collect(Collectors.toList());
     }
 
-    /* move to Helper*/
     public List<Capex> getAllCapex(){
         List<Capex> capexList = new ArrayList<>();
         capexRepository.findAll().forEach(capexList::add);
         return capexList;
     }
 
-    /* move to Helper*/
     public List<Opex> getAllOpex(){
         List<Opex> opexList = new ArrayList<>();
         opexRepository.findAll().forEach(opexList::add);
         return opexList;
     }
 
-    /* move to Helper*/
     public List<PriceItem> getPriceItemsByQuote(Quote quote){
         List<PriceItem> allPriceItems = quote.getQuoteItem().stream()
                 .map(PriceItem::new)

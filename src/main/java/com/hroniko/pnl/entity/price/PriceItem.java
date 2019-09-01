@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import static com.hroniko.pnl.entity.constants.PriceType.*;
+
 public class PriceItem {
     private BigInteger offeringId;
     private String offeringName;
@@ -19,7 +21,7 @@ public class PriceItem {
     public PriceItem(QuoteItem quoteItem) {
 
         this.totalNRC = quoteItem.getQuoteItemPrice().stream()
-                .filter(quotePrice -> "NRC".equals(quotePrice.getPriceType()))
+                .filter(quotePrice -> NRC.equals(quotePrice.getPriceType()))
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)
@@ -27,7 +29,7 @@ public class PriceItem {
                 .reduce(0.0, Double::sum);
 
         this.totalMRC = quoteItem.getQuoteItemPrice().stream()
-                .filter(quotePrice -> "RC".equals(quotePrice.getPriceType()))
+                .filter(quotePrice -> MRC.equals(quotePrice.getPriceType()))
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)

@@ -17,6 +17,9 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.hroniko.pnl.entity.constants.AttitudeToItems.SUMMARY;
+import static com.hroniko.pnl.entity.constants.NodeType.CONST;
+
 @Service
 public class PnLCalculationParallelService {
 
@@ -84,31 +87,38 @@ public class PnLCalculationParallelService {
 
         if (parent.getValue() != null) return;
 
-        /* Enrich by PEX catalog */
-        if ("RCAPT".equals(parent.getName())){
-            parent.setValues(priceItems.stream()
-                    .map(priceItem -> capexMap.get(priceItem.getOfferingId()))
-                    .map(value -> value == null ? 0.0 : value)
-                    .collect(Collectors.toList()));
-        }
-        if ("OPEOO".equals(parent.getName())){
-            parent.setValues(priceItems.stream()
-                    .map(priceItem -> opexMap.get(priceItem.getOfferingId()))
-                    .map(value -> value == null ? 0.0 : value)
-                    .collect(Collectors.toList()));
+        List<Double> values = new ArrayList<>();
+
+        switch (parent.getName()){
+            /* Enrich by CAPEX catalog */
+            case "RCAPT":
+                values = priceItems.stream()
+                        .map(priceItem -> capexMap.get(priceItem.getOfferingId()))
+                        .map(value -> value == null ? 0.0 : value)
+                        .collect(Collectors.toList());
+                break;
+            /* Enrich by OPEX catalog */
+            case "OPEOO":
+                values = priceItems.stream()
+                        .map(priceItem -> opexMap.get(priceItem.getOfferingId()))
+                        .map(value -> value == null ? 0.0 : value)
+                        .collect(Collectors.toList());
+                break;
+            /* Enrich by price */
+            case "VEXTMRC":
+                values = priceItems.stream()
+                        .map(PriceItem::getTotalMRC)
+                        .collect(Collectors.toList());
+                break;
+            /* Enrich by price */
+            case "VEXTNRC":
+                values = priceItems.stream()
+                        .map(PriceItem::getTotalNRC)
+                        .collect(Collectors.toList());
         }
 
-        /* Enrich by price */
-        if ("VEXTMRC".equals(parent.getName())){
-            parent.setValues(priceItems.stream()
-                    .map(PriceItem::getTotalMRC)
-                    .collect(Collectors.toList()));
-        }
-        if ("VEXTNRC".equals(parent.getName())){
-            parent.setValues(priceItems.stream()
-                    .map(PriceItem::getTotalNRC)
-                    .collect(Collectors.toList()));
-        }
+        if (!values.isEmpty())
+            parent.setValues(values);
 
         if (parent.getValues().isEmpty()){
             for (int i = 0; i < priceItems.size(); i++){
@@ -118,13 +128,13 @@ public class PnLCalculationParallelService {
         }
 
         /* if type != const, accumulate value */
-        if (!"const".equals(parent.getType())) {
-            List<Double> values = parent.getValues();
+        if (!CONST.equals(parent.getType())) {
+            values = parent.getValues();
             parent.setValue(values.stream().reduce(0.0, Double::sum));
         }
 
         /* check summary or every calculate */
-        if ( parent.getFinal() && "Summary".equals(parent.getAttitudeToItems())){
+        if ( parent.getFinal() && SUMMARY.equals(parent.getAttitudeToItems())){
             Double value = culculateValue(parent, childs, null);
             parent.setValue(value);
         }
@@ -135,7 +145,8 @@ public class PnLCalculationParallelService {
 
     }
 
-    private Double culculateValue(CalcNodeSeries parent, List<CalcNodeSeries> childList, Integer pos){ // if pos = null or -1, calculate as single mode -> as Summary value
+    private Double culculateValue(CalcNodeSeries parent, List<CalcNodeSeries> childList, Integer pos){
+        // if pos = null or -1, calculate as single mode -> as Summary value
         String formula = getFormulaFromCalcNode(parent);
         Set<String> variables = new HashSet<>();
         Map<String, Double> variableValues = new HashMap<>();
