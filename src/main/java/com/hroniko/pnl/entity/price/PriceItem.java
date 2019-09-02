@@ -25,6 +25,7 @@ public class PriceItem {
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)
+                .filter(Objects::nonNull)
                 .map(this::toDoubleValue)
                 .reduce(0.0, Double::sum);
 
@@ -33,6 +34,7 @@ public class PriceItem {
                 .map(QuotePrice::getPrice)
                 .filter(Objects::nonNull)
                 .map(Price::getValueExcludingTax)
+                .filter(Objects::nonNull)
                 .map(this::toDoubleValue)
                 .reduce(0.0, Double::sum);
         this.quantity = quoteItem.getQuantity() == null ? 0 : quoteItem.getQuantity();
