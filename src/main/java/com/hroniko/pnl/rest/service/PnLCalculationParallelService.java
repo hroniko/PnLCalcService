@@ -8,10 +8,14 @@ import com.hroniko.pnl.entity.results.PnLCalculationResult;
 import com.hroniko.pnl.entity.price.PriceItem;
 import com.hroniko.pnl.utils.PnLHelper;
 import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -20,32 +24,43 @@ import java.util.stream.Collectors;
 import static com.hroniko.pnl.entity.constants.AttitudeToItems.SUMMARY;
 import static com.hroniko.pnl.entity.constants.NodeType.CONST;
 
+@Slf4j
 @Service
-public class PnLCalculationParallelService {
+@RequiredArgsConstructor
+public class PnLCalculationParallelService implements CalculationService{
 
     @Autowired
     PnLHelper pnLHelper;
 
-    public PnLCalculationResult calculateByQuote(Quote quote){
+    public Flux<PnLCalculationNodeResult> calculateByQuote(Quote quote){
 
         List<PriceItem> priceItems = pnLHelper.getPriceItemsByQuote(quote);
         List<CalcNodeSeries> finalCalcNodes = pnLHelper.getFinalCalcNodeSeries();
         recalculateNodeValues(finalCalcNodes, priceItems);
 
-        return new PnLCalculationResult()
-                .setName("PnL Calculation Result v 0.00") // TODO set generate result name
-                .setCustomerId("123") // TODO set customer id
-                .setCustomerName("Customer Test") // TODO set customer name
-                .setNodes(finalCalcNodes.stream()
-                        .map(fcn -> new PnLCalculationNodeResult()
-                                .setName(fcn.getDescription())
-                                .setShortName(fcn.getName())
-                                .setValue(fcn.getValue().toString())
-                                .setCurrencyCode(fcn.getCurrencyCode())
-                                .setPercent(fcn.isPercent())
-                                .setMaxValue(fcn.getMaxValue())
-                                .setMinValue(fcn.getMinValue()))
-                        .collect(Collectors.toList()));
+        return Flux.fromStream(finalCalcNodes.stream()).map(fcn -> new PnLCalculationNodeResult()
+                .setName(fcn.getDescription())
+                .setShortName(fcn.getName())
+                .setValue(fcn.getValue().toString())
+                .setCurrencyCode(fcn.getCurrencyCode())
+                .setPercent(fcn.isPercent())
+                .setMaxValue(fcn.getMaxValue())
+                .setMinValue(fcn.getMinValue()));
+
+//        return new PnLCalculationResult()
+//                .setName("PnL Calculation Result v 0.00") // TODO set generate result name
+//                .setCustomerId("123") // TODO set customer id
+//                .setCustomerName("Customer Test") // TODO set customer name
+//                .setNodes(finalCalcNodes.stream()
+//                        .map(fcn -> new PnLCalculationNodeResult()
+//                                .setName(fcn.getDescription())
+//                                .setShortName(fcn.getName())
+//                                .setValue(fcn.getValue().toString())
+//                                .setCurrencyCode(fcn.getCurrencyCode())
+//                                .setPercent(fcn.isPercent())
+//                                .setMaxValue(fcn.getMaxValue())
+//                                .setMinValue(fcn.getMinValue()))
+//                        .collect(Collectors.toList()));
     }
 
     private Map<BigInteger, Double> getOferingToOpexMap(){

@@ -11,6 +11,7 @@ import com.hroniko.pnl.utils.entity.CalcNodeSeries;
 import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,10 @@ public class PnLHelper {
     @Autowired
     OpexRepository opexRepository;
 
-    public List<CalcNode> getAllCalcNodes(){
+    public Flux<CalcNode> getAllCalcNodes(){
         List<CalcNode> allCalcNodes = new ArrayList<>();
         calcNodeRepository.findAll().forEach(allCalcNodes::add);
-        return allCalcNodes;
+        return Flux.fromStream(allCalcNodes.stream());
     }
 
     public List<CalcNodeSeries> getAllCalcNodeSeries(){
@@ -65,8 +66,6 @@ public class PnLHelper {
     public List<PriceItem> getPriceItemsByQuote(Quote quote){
         List<PriceItem> allPriceItems = quote.getQuoteItem().stream()
                 .map(PriceItem::new)
-                .collect(Collectors.toList());
-        return allPriceItems.stream()
                 .filter(pi -> pi.getTotalMRC() + pi.getTotalNRC() > 0.0)
                 .collect(Collectors.toList());
     }
