@@ -29,10 +29,10 @@ public class PnLHelper {
     @Autowired
     OpexRepository opexRepository;
 
-    public Flux<CalcNode> getAllCalcNodes(){
+    public List<CalcNode> getAllCalcNodes(){
         List<CalcNode> allCalcNodes = new ArrayList<>();
         calcNodeRepository.findAll().forEach(allCalcNodes::add);
-        return Flux.fromStream(allCalcNodes.stream());
+        return allCalcNodes;
     }
 
     public List<CalcNodeSeries> getAllCalcNodeSeries(){
@@ -68,6 +68,7 @@ public class PnLHelper {
                 .map(PriceItem::new)
                 .filter(pi -> pi.getTotalMRC() + pi.getTotalNRC() > 0.0)
                 .collect(Collectors.toList());
+        return allPriceItems;
     }
 
     public void deleteAllCalcNodes(){

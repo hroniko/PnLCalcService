@@ -1,12 +1,12 @@
-package com.hroniko.pnl.rest.service;
+package com.hroniko.pnl.core;
 
 import com.hroniko.pnl.entity.catalog.Capex;
 import com.hroniko.pnl.entity.catalog.Opex;
-import com.hroniko.pnl.utils.entity.CalcNodeSeries;
+import com.hroniko.pnl.entity.price.PriceItem;
 import com.hroniko.pnl.entity.results.PnLCalculationNodeResult;
 import com.hroniko.pnl.entity.results.PnLCalculationResult;
-import com.hroniko.pnl.entity.price.PriceItem;
 import com.hroniko.pnl.utils.PnLHelper;
+import com.hroniko.pnl.utils.entity.CalcNodeSeries;
 import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,40 +27,31 @@ import static com.hroniko.pnl.entity.constants.NodeType.CONST;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PnLCalculationParallelService implements CalculationService{
+public class ParallelCalculationQuoteLogic implements CalculationQuoteLogic {
 
     @Autowired
     PnLHelper pnLHelper;
 
-    public Flux<PnLCalculationNodeResult> calculateByQuote(Quote quote){
+    public Mono<PnLCalculationResult> calculate(Quote quote){
 
         List<PriceItem> priceItems = pnLHelper.getPriceItemsByQuote(quote);
         List<CalcNodeSeries> finalCalcNodes = pnLHelper.getFinalCalcNodeSeries();
         recalculateNodeValues(finalCalcNodes, priceItems);
 
-        return Flux.fromStream(finalCalcNodes.stream()).map(fcn -> new PnLCalculationNodeResult()
-                .setName(fcn.getDescription())
-                .setShortName(fcn.getName())
-                .setValue(fcn.getValue().toString())
-                .setCurrencyCode(fcn.getCurrencyCode())
-                .setPercent(fcn.isPercent())
-                .setMaxValue(fcn.getMaxValue())
-                .setMinValue(fcn.getMinValue()));
-
-//        return new PnLCalculationResult()
-//                .setName("PnL Calculation Result v 0.00") // TODO set generate result name
-//                .setCustomerId("123") // TODO set customer id
-//                .setCustomerName("Customer Test") // TODO set customer name
-//                .setNodes(finalCalcNodes.stream()
-//                        .map(fcn -> new PnLCalculationNodeResult()
-//                                .setName(fcn.getDescription())
-//                                .setShortName(fcn.getName())
-//                                .setValue(fcn.getValue().toString())
-//                                .setCurrencyCode(fcn.getCurrencyCode())
-//                                .setPercent(fcn.isPercent())
-//                                .setMaxValue(fcn.getMaxValue())
-//                                .setMinValue(fcn.getMinValue()))
-//                        .collect(Collectors.toList()));
+        return Mono.just(new PnLCalculationResult()
+                .setName("PnL Calculation Result v 0.00") // TODO set generate result name
+                .setCustomerId("123") // TODO set customer id
+                .setCustomerName("Customer Test") // TODO set customer name
+                .setNodes(finalCalcNodes.stream()
+                        .map(fcn -> new PnLCalculationNodeResult()
+                                .setName(fcn.getDescription())
+                                .setShortName(fcn.getName())
+                                .setValue(fcn.getValue().toString())
+                                .setCurrencyCode(fcn.getCurrencyCode())
+                                .setPercent(fcn.isPercent())
+                                .setMaxValue(fcn.getMaxValue())
+                                .setMinValue(fcn.getMinValue()))
+                        .collect(Collectors.toList())));
     }
 
     private Map<BigInteger, Double> getOferingToOpexMap(){
@@ -80,7 +71,7 @@ public class PnLCalculationParallelService implements CalculationService{
     }
 
 
-    public void recalculateNodeValues(List<CalcNodeSeries> calcNodes, List<PriceItem> priceItems){
+    private void recalculateNodeValues(List<CalcNodeSeries> calcNodes, List<PriceItem> priceItems){
         Map<BigInteger, Double> offeringToCapexMap = getOferingToCapexMap();
         Map<BigInteger, Double> offeringToOpexMap = getOferingToOpexMap();
         calcNodes.forEach(calcNode -> recalculateValues(calcNode, priceItems, offeringToCapexMap, offeringToOpexMap ));
@@ -183,5 +174,4 @@ public class PnLCalculationParallelService implements CalculationService{
 
         return expression.evaluate();
     }
-
 }

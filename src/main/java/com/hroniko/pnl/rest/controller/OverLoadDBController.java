@@ -7,19 +7,19 @@ import com.hroniko.pnl.entity.nodes.additional.CalcNodeConst;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeFinal;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeRefvar;
 import com.hroniko.pnl.entity.nodes.additional.CalcNodeVar;
+import com.hroniko.pnl.entity.results.UpdateDBResult;
 import com.hroniko.pnl.entity.toms.CalculationStructure;
 import com.hroniko.pnl.rest.service.UpdateService;
-import com.hroniko.pnl.rest.service.PnLCalculationService;
 import com.hroniko.pnl.utils.PnLHelper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import java.math.BigInteger;
 import java.util.List;
 
@@ -29,6 +29,7 @@ import static com.hroniko.pnl.entity.constants.NodeType.*;
 import static com.hroniko.pnl.entity.constants.NodeValueType.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/repo")
 public class OverLoadDBController {
 
@@ -36,16 +37,14 @@ public class OverLoadDBController {
     UpdateService updateService;
 
     @Autowired
-    PnLCalculationService pnLCalculationService;
-
-    @Autowired
     PnLHelper pnLHelper;
 
     private static final String EMPTY = "";
 
     /* only for test TODO remove it!*/
-    @RequestMapping(value = {"/restart"}, method = RequestMethod.GET)
-    public ResponseEntity restartDB(HttpServletRequest request){
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/restart", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Flux<CalcNode> restartDB(){
 
         pnLHelper.clearRepository();
 
@@ -869,11 +868,13 @@ public class OverLoadDBController {
                 );
 
         List<CalcNode> finalCalcNodes = pnLHelper.getFinalCalcNodes();
-        return new ResponseEntity<>(finalCalcNodes, HttpStatus.OK);
+        return Flux.fromStream(finalCalcNodes.stream());
     }
 
-    @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
-    public ResponseEntity setCalculationStructureToDB(@RequestBody CalculationStructure calculationStructure){
-        return new ResponseEntity<>(updateService.setCalculationStructureToDB(calculationStructure), HttpStatus.OK);
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Mono<UpdateDBResult> setCalculationStructureToDB(@RequestBody CalculationStructure calculationStructure){
+        return Mono.just(updateService.setCalculationStructureToDB(calculationStructure));
     }
 }
