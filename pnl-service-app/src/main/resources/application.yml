@@ -1,0 +1,22 @@
+server:
+  address: 0.0.0.0
+  port: 8085
+
+spring:
+  application:
+  mvc:
+    async:
+      request-timeout: 600000
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    neo4j:
+      username: neo4j
+      password: secret
+
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: shutdown
+        include: '*'
