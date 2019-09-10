@@ -19,11 +19,12 @@
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
+
         <spring-webflux.version>5.1.9.RELEASE</spring-webflux.version>
-        <spring-data-neo4j.version>5.0.5.RELEASE</spring-data-neo4j.version>
+        <spring-data-neo4j.version>5.0.13.RELEASE</spring-data-neo4j.version>
         <jackson-databind.version>2.9.5</jackson-databind.version>
         <apache.commons.version>3.9</apache.commons.version>
-        <lombok.version>1.16.18</lombok.version>
+        <lombok.version>1.18.8</lombok.version>
         <bss-bom.version>0.0.2-SNAPSHOT</bss-bom.version>
         <exp4j.version>0.4.8</exp4j.version>
     </properties>
@@ -46,6 +47,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>io.github.lukehutch</groupId>
+                <artifactId>fast-classpath-scanner</artifactId>
+                <version>3.1.13</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
                 <version>${spring-boot.version}</version>
@@ -55,24 +61,29 @@
                 <artifactId>spring-boot-starter-data-neo4j</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.data</groupId>-->
+<!--                <artifactId>spring-data-neo4j</artifactId>-->
+<!--                <version>5.1.0.M2</version>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j</artifactId>
-                <version>3.4.9</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-ogm-embedded-driver</artifactId>
-                <version>${neo4j-ogm.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j</groupId>
-                <artifactId>neo4j-ogm-bolt-driver</artifactId>
-                <version>${neo4j-ogm.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.neo4j</groupId>-->
+<!--                <artifactId>neo4j</artifactId>-->
+<!--                <version>3.3.1</version>-->
+<!--                <scope>runtime</scope>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.neo4j</groupId>-->
+<!--                <artifactId>neo4j-ogm-embedded-driver</artifactId>-->
+<!--                <version>3.1.6</version>-->
+<!--                <scope>test</scope>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.neo4j</groupId>-->
+<!--                <artifactId>neo4j-ogm-bolt-driver</artifactId>-->
+<!--                <version>3.1.6</version>-->
+<!--            </dependency>-->
 
 
 <!--            <dependency>-->

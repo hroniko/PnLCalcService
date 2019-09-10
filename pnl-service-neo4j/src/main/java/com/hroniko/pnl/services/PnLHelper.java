@@ -20,14 +20,20 @@ import java.util.stream.Collectors;
 @Service
 public class PnLHelper {
 
-    @Autowired
+    final
     CalcNodeRepository calcNodeRepository;
 
-    @Autowired
+    final
     CapexRepository capexRepository;
 
-    @Autowired
+    final
     OpexRepository opexRepository;
+
+    public PnLHelper(CalcNodeRepository calcNodeRepository, CapexRepository capexRepository, OpexRepository opexRepository) {
+        this.calcNodeRepository = calcNodeRepository;
+        this.capexRepository = capexRepository;
+        this.opexRepository = opexRepository;
+    }
 
     public List<CalcNode> getAllCalcNodes(){
         List<CalcNode> allCalcNodes = new ArrayList<>();
