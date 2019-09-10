@@ -9,6 +9,7 @@
         <module>pnl-service-models</module>
         <module>pnl-service-toms-integration</module>
         <module>pnl-service-neo4j</module>
+        <module>pnl-service-mongo</module>
         <module>pnl-service-calculation-logic</module>
         <module>pnl-service-impl</module>
         <module>pnl-service-app</module>

@@ -24,6 +24,7 @@
         <spring-boot-devtools.version>${spring-boot.version}</spring-boot-devtools.version>
         <spring-boot-configuration-processor.version>${spring-boot.version}</spring-boot-configuration-processor.version>
         <spring-boot-starter-webflux.version>${spring-boot.version}</spring-boot-starter-webflux.version>
+        <spring-boot-starter-data-mongodb-reactive.version>${spring-boot.version}</spring-boot-starter-data-mongodb-reactive.version>
         <lombok.version>1.18.8</lombok.version>
         <apache.commons-lang3.version>3.9</apache.commons-lang3.version>
         <spring-webflux.version>5.1.9.RELEASE</spring-webflux.version>
@@ -119,6 +120,11 @@
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
                 <version>${reactor-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+                <version>${spring-boot-starter-data-mongodb-reactive.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
