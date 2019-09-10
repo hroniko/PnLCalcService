@@ -17,16 +17,20 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
-
-        <spring-webflux.version>5.1.9.RELEASE</spring-webflux.version>
-        <spring-data-neo4j.version>5.0.13.RELEASE</spring-data-neo4j.version>
-        <jackson-databind.version>2.9.5</jackson-databind.version>
-        <apache.commons.version>3.9</apache.commons.version>
+        <fast-classpath-scanner.version>3.1.13</fast-classpath-scanner.version>
+        <spring-boot-starter-actuator.version>${spring-boot.version}</spring-boot-starter-actuator.version>
+        <spring-boot-starter-data-neo4j.version>${spring-boot.version}</spring-boot-starter-data-neo4j.version>
+        <spring-boot-devtools.version>${spring-boot.version}</spring-boot-devtools.version>
+        <spring-boot-configuration-processor.version>${spring-boot.version}</spring-boot-configuration-processor.version>
+        <spring-boot-starter-webflux.version>${spring-boot.version}</spring-boot-starter-webflux.version>
         <lombok.version>1.18.8</lombok.version>
-        <bss-bom.version>0.0.2-SNAPSHOT</bss-bom.version>
+        <apache.commons-lang3.version>3.9</apache.commons-lang3.version>
+        <spring-webflux.version>5.1.9.RELEASE</spring-webflux.version>
         <exp4j.version>0.4.8</exp4j.version>
+        <telecom-business-api-datamodel.version>2.0.3.8_fix5</telecom-business-api-datamodel.version>
+        <tbapi-services-impl-oe.version>10.2.2.10_fix4</tbapi-services-impl-oe.version>
+        <reactor-core.version>3.2.12.RELEASE</reactor-core.version>
     </properties>
     <repositories>
         <!-- WA for the https://issues.apache.org/jira/browse/MNG-5781 -->
@@ -49,30 +53,41 @@
             <dependency>
                 <groupId>io.github.lukehutch</groupId>
                 <artifactId>fast-classpath-scanner</artifactId>
-                <version>3.1.13</version>
+                <version>${fast-classpath-scanner.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot-starter-actuator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-neo4j</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot-starter-data-neo4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot-devtools.version}</version>
                 <scope>runtime</scope>
                 <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-configuration-processor</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot-configuration-processor.version}</version>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot-starter-webflux.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webflux</artifactId>
+                <version>${spring-webflux.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -83,18 +98,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>${apache.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-webflux</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webflux</artifactId>
-                <version>${spring-webflux.version}</version>
+                <version>${apache.commons-lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.objecthunter</groupId>
@@ -104,17 +108,17 @@
             <dependency>
                 <groupId>com.netcracker.telecom-business-api</groupId>
                 <artifactId>telecom-business-api-datamodel</artifactId>
-                <version>2.0.3.8_fix5</version>
+                <version>${telecom-business-api-datamodel.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.netcracker.tbapi-services</groupId>
                 <artifactId>tbapi-services-impl-oe</artifactId>
-                <version>10.2.2.10_fix4</version>
+                <version>${tbapi-services-impl-oe.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
-                <version>3.2.12.RELEASE</version>
+                <version>${reactor-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
