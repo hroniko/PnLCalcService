@@ -2,11 +2,11 @@ package com.hroniko.pnl.rest.controller;
 
 
 import com.hroniko.pnl.entities.results.PnLCalculationResult;
+import com.hroniko.pnl.entities.tmf.quote.Quote;
 import com.hroniko.pnl.logic.ParallelCalculationQuoteLogic;
 import com.hroniko.pnl.logic.SerialCalculationQuoteLogic;
 import com.hroniko.pnl.mongo.services.PersistenceService;
 import com.hroniko.pnl.services.CalculationService;
-import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,8 +37,8 @@ public class CalculationController {
     public Mono<PnLCalculationResult> calculateByQuote(@RequestBody Quote quote) {
         return calculationService
                 .setCalculationQuoteLogic(serialCalculationQuoteLogic)
-                .calculateByQuote(quote)
-                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
+                .calculateByQuote(quote);
+                //.flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
     }
 
 
@@ -47,7 +47,7 @@ public class CalculationController {
     public Mono<PnLCalculationResult> calculateByQuoteParallel(@RequestBody Quote quote) {
         return calculationService
                 .setCalculationQuoteLogic(parallelCalculationQuoteLogic)
-                .calculateByQuote(quote)
-                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
+                .calculateByQuote(quote);
+                //.flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
     }
 }

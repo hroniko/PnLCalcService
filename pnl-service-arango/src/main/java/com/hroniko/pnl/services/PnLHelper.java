@@ -6,12 +6,12 @@ import com.hroniko.pnl.entities.nodes.CalcNode;
 import com.hroniko.pnl.entities.nodes.CalcNodeSeries;
 import com.hroniko.pnl.entities.nodes.ChildOf;
 import com.hroniko.pnl.entities.price.PriceItem;
+import com.hroniko.pnl.entities.tmf.quote.Quote;
 import com.hroniko.pnl.repositories.CalcNodeRepository;
 import com.hroniko.pnl.repositories.CapexRepository;
 import com.hroniko.pnl.repositories.OpexRepository;
 
 import com.hroniko.pnl.repositories.ChildOfRepository;
-import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

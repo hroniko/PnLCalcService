@@ -24,14 +24,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.netcracker.telecom-business-api</groupId>
-            <artifactId>telecom-business-api-datamodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.netcracker.tbapi-services</groupId>
-            <artifactId>tbapi-services-impl-oe</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -1,8 +1,8 @@
 package com.hroniko.pnl.entities.price;
 
-import com.netcracker.tbapi.datamodel.tmf.oe.price.Price;
-import com.netcracker.tbapi.datamodel.tmf.quote.QuoteItem;
-import com.netcracker.tbapi.datamodel.tmf.quote.QuotePrice;
+import com.hroniko.pnl.entities.tmf.oe.price.Price;
+import com.hroniko.pnl.entities.tmf.quote.QuoteItem;
+import com.hroniko.pnl.entities.tmf.quote.QuotePrice;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

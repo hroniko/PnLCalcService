@@ -1,8 +1,8 @@
 package com.hroniko.pnl.services;
 
 import com.hroniko.pnl.entities.results.PnLCalculationResult;
+import com.hroniko.pnl.entities.tmf.quote.Quote;
 import com.hroniko.pnl.logic.CalculationQuoteLogic;
-import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

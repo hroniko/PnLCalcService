@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document("opexes")
-@HashIndex(fields = { "name", "offeringId" }, unique = true)
 public class Opex {
 
     @Id

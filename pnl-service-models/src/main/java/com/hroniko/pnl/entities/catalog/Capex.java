@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document("capexes")
-@HashIndex(fields = { "name", "offeringId" }, unique = true)
 public class Capex {
-
     @Id
     private String id;
 

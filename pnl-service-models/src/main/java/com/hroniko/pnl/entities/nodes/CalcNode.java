@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document("calcnodes")
-@HashIndex(fields = { "name" }, unique = true)
+@HashIndex(fields = { "id" })
 public class CalcNode {
     @Id
     private String id;

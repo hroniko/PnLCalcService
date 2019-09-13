@@ -52,14 +52,6 @@
             <artifactId>spring-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.netcracker.telecom-business-api</groupId>
-            <artifactId>telecom-business-api-datamodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.netcracker.tbapi-services</groupId>
-            <artifactId>tbapi-services-impl-oe</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>

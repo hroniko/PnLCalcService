@@ -20,7 +20,7 @@
         <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
         <fast-classpath-scanner.version>3.1.13</fast-classpath-scanner.version>
         <spring-boot-starter-actuator.version>${spring-boot.version}</spring-boot-starter-actuator.version>
-
+        <spring-boot-starter-validation.version>${spring-boot.version}</spring-boot-starter-validation.version>
         <spring-boot-devtools.version>${spring-boot.version}</spring-boot-devtools.version>
         <spring-boot-configuration-processor.version>${spring-boot.version}</spring-boot-configuration-processor.version>
         <spring-boot-starter-webflux.version>${spring-boot.version}</spring-boot-starter-webflux.version>
@@ -29,8 +29,6 @@
         <apache.commons-lang3.version>3.9</apache.commons-lang3.version>
         <spring-webflux.version>5.1.9.RELEASE</spring-webflux.version>
         <exp4j.version>0.4.8</exp4j.version>
-        <telecom-business-api-datamodel.version>2.0.3.8_fix5</telecom-business-api-datamodel.version>
-        <tbapi-services-impl-oe.version>10.2.2.10_fix4</tbapi-services-impl-oe.version>
         <reactor-core.version>3.2.12.RELEASE</reactor-core.version>
     </properties>
     <repositories>
@@ -116,16 +114,6 @@
                 <version>${exp4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.netcracker.telecom-business-api</groupId>
-                <artifactId>telecom-business-api-datamodel</artifactId>
-                <version>${telecom-business-api-datamodel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.netcracker.tbapi-services</groupId>
-                <artifactId>tbapi-services-impl-oe</artifactId>
-                <version>${tbapi-services-impl-oe.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
                 <version>${reactor-core.version}</version>
@@ -134,6 +122,27 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
                 <version>${spring-boot-starter-data-mongodb-reactive.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring-boot-starter-validation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.9.9</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.9.9</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.9.9</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

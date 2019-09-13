@@ -1,7 +1,7 @@
 package com.hroniko.pnl.logic;
 
 import com.hroniko.pnl.entities.results.PnLCalculationResult;
-import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
+import com.hroniko.pnl.entities.tmf.quote.Quote;
 import reactor.core.publisher.Mono;
 
 public interface CalculationQuoteLogic {
