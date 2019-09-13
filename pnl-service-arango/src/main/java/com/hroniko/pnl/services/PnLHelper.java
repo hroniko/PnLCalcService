@@ -4,13 +4,14 @@ import com.hroniko.pnl.entities.catalog.Capex;
 import com.hroniko.pnl.entities.catalog.Opex;
 import com.hroniko.pnl.entities.nodes.CalcNode;
 import com.hroniko.pnl.entities.nodes.CalcNodeSeries;
+import com.hroniko.pnl.entities.nodes.ChildOf;
 import com.hroniko.pnl.entities.price.PriceItem;
 import com.hroniko.pnl.repositories.CalcNodeRepository;
 import com.hroniko.pnl.repositories.CapexRepository;
 import com.hroniko.pnl.repositories.OpexRepository;
 
+import com.hroniko.pnl.repositories.ChildOfRepository;
 import com.netcracker.tbapi.datamodel.tmf.quote.Quote;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,15 +25,19 @@ public class PnLHelper {
     CalcNodeRepository calcNodeRepository;
 
     final
+    ChildOfRepository childOfRepository;
+
+    final
     CapexRepository capexRepository;
 
     final
     OpexRepository opexRepository;
 
-    public PnLHelper(CalcNodeRepository calcNodeRepository, CapexRepository capexRepository, OpexRepository opexRepository) {
+    public PnLHelper(CalcNodeRepository calcNodeRepository, CapexRepository capexRepository, OpexRepository opexRepository, ChildOfRepository childOfRepository) {
         this.calcNodeRepository = calcNodeRepository;
         this.capexRepository = capexRepository;
         this.opexRepository = opexRepository;
+        this.childOfRepository = childOfRepository;
     }
 
     public List<CalcNode> getAllCalcNodes(){
@@ -82,12 +87,36 @@ public class PnLHelper {
     }
 
     public void saveCalcNodes(List<CalcNode> calcNodes){
-        calcNodes.forEach(calcNode -> calcNodeRepository.save(calcNode));
+        calcNodes.forEach(this::saveCalcNodes);
     }
 
     public void saveCalcNodes(CalcNode ... calcNodes){
         for (CalcNode calcNode : calcNodes) {
             calcNodeRepository.save(calcNode);
+        }
+    }
+
+    public void deleteAllReferences(){
+        childOfRepository.deleteAll();
+    }
+
+    public void saveReferences(List<CalcNode> calcNodes){
+        calcNodes.forEach(this::saveReferences);
+    }
+
+    public void saveReferences(CalcNode ... calcNodes){
+        for (CalcNode calcNode : calcNodes) {
+            CalcNode calcNodeSaved = calcNodeRepository.findByName(calcNode.getName());
+            List<CalcNode> childCalcNodes = calcNode.getCalcNodes();
+            if (childCalcNodes != null && !childCalcNodes.isEmpty()){
+                childCalcNodes.forEach(ccn -> {
+                    CalcNode childCalcNodeSaved = calcNodeRepository.findByName(ccn.getName());
+                    ChildOf childOf = new ChildOf(childCalcNodeSaved, calcNodeSaved);
+                    childOfRepository.save(childOf);
+                });
+
+
+            }
         }
     }
 

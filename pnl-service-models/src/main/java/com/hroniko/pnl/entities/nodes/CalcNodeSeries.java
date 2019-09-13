@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CalcNodeSeries {
-    private Long id;
+    private String id;
 
     private String description;
     private String name;
@@ -45,11 +45,12 @@ public class CalcNodeSeries {
         this.isPercent = calcNode.isPercent();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public CalcNodeSeries setId(Long id) {
+
+    public CalcNodeSeries setId(String id) {
         this.id = id;
         return this;
     }

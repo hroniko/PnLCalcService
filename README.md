@@ -1,2 +1,2 @@
 # PnLCalcService
-PNL calculation microservice + Neo4J
+PNL calculation microservice + graph db

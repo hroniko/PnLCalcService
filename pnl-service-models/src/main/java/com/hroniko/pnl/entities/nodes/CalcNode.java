@@ -1,27 +1,26 @@
 package com.hroniko.pnl.entities.nodes;
 
+import com.arangodb.springframework.annotation.Document;
+import com.arangodb.springframework.annotation.HashIndex;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
+import com.arangodb.springframework.annotation.Relations;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NodeEntity
+@Document("calcnodes")
+@HashIndex(fields = { "name" }, unique = true)
 public class CalcNode {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String description;
     private String name;
 
-    @Relationship(type = "REFERENCE", direction = Relationship.INCOMING)
+    @Relations(edges = ChildOf.class, direction = Relations.Direction.INBOUND)
     private List<CalcNode> calcNodes;
 
     private String formula;
@@ -45,11 +44,11 @@ public class CalcNode {
      * https://dzone.com/articles/modelling-data-neo4j
      */
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public CalcNode setId(Long id) {
+    public CalcNode setId(String id) {
         this.id = id;
         return this;
     }

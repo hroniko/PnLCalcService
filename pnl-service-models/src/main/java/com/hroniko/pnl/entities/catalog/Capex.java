@@ -1,20 +1,20 @@
 package com.hroniko.pnl.entities.catalog;
+import com.arangodb.springframework.annotation.Document;
+import com.arangodb.springframework.annotation.HashIndex;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.data.annotation.Id;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-@NodeEntity
+
+@Document("capexes")
+@HashIndex(fields = { "name", "offeringId" }, unique = true)
 public class Capex {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String name;
     private String description;
@@ -22,18 +22,17 @@ public class Capex {
     private String offeringName;
     private Double value;
 
-    @Relationship(type = "CAPEX", direction = Relationship.DIRECTION)
     private List<Capex> capexList;
 
     public Capex() {
-        // Empty constructor required as of Neo4j API 2.0.5
+
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public Capex setId(Long id) {
+    public Capex setId(String id) {
         this.id = id;
         return this;
     }

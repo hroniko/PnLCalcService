@@ -1,6 +1,6 @@
 server:
   address: 0.0.0.0
-  port: 8085
+  port: 8086
 
 spring:
   application:
@@ -10,10 +10,11 @@ spring:
   main:
     allow-bean-definition-overriding: true
   data:
-    neo4j:
-      username: neo4j
+    arangodb:
+      database: pnl-service3
+      user: root
       password: secret
-      uri: bolt://127.0.0.1:7687
+      hosts: 127.0.0.1:8529
 
 management:
   endpoints:

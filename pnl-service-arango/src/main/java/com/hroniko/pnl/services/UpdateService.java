@@ -66,6 +66,10 @@ public class UpdateService {
         /* move all calc nodes to database */
         pnLHelper.saveCalcNodes(allCalcNodes);
 
+
+        pnLHelper.deleteAllReferences();
+        pnLHelper.saveReferences(allCalcNodes);
+
         /* get all calc nodes from database */
         List<CalcNode> dbAllCalcNodes = pnLHelper.getAllCalcNodes();
         if (dbAllCalcNodes == null) return dbResult;
