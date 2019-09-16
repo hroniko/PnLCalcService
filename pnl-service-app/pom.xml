@@ -49,9 +49,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-neo4j</artifactId>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-neo4j</artifactId>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>spring-data-orientdb-graph</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>spring-boot-orientdb-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

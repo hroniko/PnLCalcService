@@ -1,9 +1,9 @@
 package com.hroniko.pnl.repositories;
 
 import com.hroniko.pnl.entities.catalog.Capex;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.orient.object.repository.OrientObjectRepository;
 
-public interface CapexRepository extends Neo4jRepository<Capex, Long> {
+public interface CapexRepository extends OrientObjectRepository<Capex> {
 
     Capex findByName(String name);
 }

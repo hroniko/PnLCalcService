@@ -1,27 +1,19 @@
 package com.hroniko.pnl.entities.nodes;
 
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
+import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
-@NodeEntity
 public class CalcNode {
     @Id
-    @GeneratedValue
     private Long id;
 
     private String description;
     private String name;
 
-    @Relationship(type = "REFERENCE", direction = Relationship.INCOMING)
     private List<CalcNode> calcNodes;
 
     private String formula;

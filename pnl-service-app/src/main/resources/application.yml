@@ -9,11 +9,6 @@ spring:
       request-timeout: 600000
   main:
     allow-bean-definition-overriding: true
-  data:
-    neo4j:
-      username: neo4j
-      password: secret
-      uri: bolt://127.0.0.1:7687
 
 management:
   endpoints:

@@ -1,8 +1,8 @@
 package com.hroniko.pnl.repositories;
 
 import com.hroniko.pnl.entities.nodes.CalcNode;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.orient.object.repository.OrientObjectRepository;
 
-public interface CalcNodeRepository extends Neo4jRepository<CalcNode, Long> {
+public interface CalcNodeRepository extends OrientObjectRepository<CalcNode> {
     CalcNode findByName(String name);
 }

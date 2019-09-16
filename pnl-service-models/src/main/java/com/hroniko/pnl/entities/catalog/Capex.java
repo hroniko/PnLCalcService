@@ -1,19 +1,15 @@
 package com.hroniko.pnl.entities.catalog;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+import javax.persistence.Id;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-@NodeEntity
+
 public class Capex {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     private String name;
@@ -22,7 +18,6 @@ public class Capex {
     private String offeringName;
     private Double value;
 
-    @Relationship(type = "CAPEX", direction = Relationship.DIRECTION)
     private List<Capex> capexList;
 
     public Capex() {
