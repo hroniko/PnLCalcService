@@ -2,10 +2,15 @@ package com.hroniko.pnl.entities.results;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+@Document(collection = "PnLCalculationResult")
 public class PnLCalculationResult {
+    @Id
+    private String id;
     private String name;
     private String customerId;
     private String customerName;
@@ -27,6 +32,15 @@ public class PnLCalculationResult {
         this.customerName = customerName;
         this.locationIds = locationIds;
         this.nodes = nodes;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public PnLCalculationResult setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -77,6 +91,7 @@ public class PnLCalculationResult {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+                .append("id", id)
                 .append("name", name)
                 .append("customerId", customerId)
                 .append("customerName", customerName)

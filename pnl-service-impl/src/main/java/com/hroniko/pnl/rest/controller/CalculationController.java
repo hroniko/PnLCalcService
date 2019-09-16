@@ -39,9 +39,10 @@ public class CalculationController {
     public Flux<PnLCalculationNodeResult> calculateByQuote(@RequestBody Quote quote) {
         Mono<PnLCalculationResult> calculationResult = calculationService
                 .setCalculationQuoteLogic(serialCalculationQuoteLogic)
-                .calculateByQuote(quote);
+                .calculateByQuote(quote)
+                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
 
-        calculationResult.subscribe(persistenceService::save);
+        //calculationResult.subscribe(persistenceService::save);
 
         return calculationResult.map(PnLCalculationResult::getNodes).flatMapMany(Flux::fromIterable);
 //                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
@@ -53,9 +54,10 @@ public class CalculationController {
     public Flux<PnLCalculationNodeResult> calculateByQuoteParallel(@RequestBody Quote quote) {
         Mono<PnLCalculationResult> calculationResult = calculationService
                 .setCalculationQuoteLogic(parallelCalculationQuoteLogic)
-                .calculateByQuote(quote);
+                .calculateByQuote(quote)
+                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
 
-        calculationResult.subscribe(persistenceService::save);
+//        calculationResult.subscribe(persistenceService::save);
 
         return calculationResult.map(PnLCalculationResult::getNodes).flatMapMany(Flux::fromIterable);
 //                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));

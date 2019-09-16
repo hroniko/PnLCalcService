@@ -1,7 +1,6 @@
 package com.hroniko.pnl.mongo.services;
 
 import com.hroniko.pnl.entities.results.PnLCalculationResult;
-import com.hroniko.pnl.mongo.entities.PnLCalculationPersistence;
 import com.hroniko.pnl.mongo.repositories.CalculationRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -21,12 +20,9 @@ public class PersistenceService {
      * @param calculationPersistence
      * @return saved/updated calculationPersistence
      */
-    public Mono<PnLCalculationPersistence> save(PnLCalculationResult calculationPersistence) {
+    public Mono<PnLCalculationResult> save(PnLCalculationResult calculationPersistence) {
         if (calculationPersistence == null) return Mono.empty();
-        if (calculationPersistence instanceof PnLCalculationPersistence){
-            return calculationRepository.save((PnLCalculationPersistence)calculationPersistence);
-        }
-        return calculationRepository.save(new PnLCalculationPersistence(calculationPersistence));
+        return calculationRepository.save(calculationPersistence);
 
     }
 
@@ -35,7 +31,7 @@ public class PersistenceService {
      * @param id
      * @return
      */
-    public Mono<PnLCalculationPersistence> findOne(String id) {
+    public Mono<PnLCalculationResult> findOne(String id) {
         return calculationRepository.findById(id);
     }
 
@@ -43,7 +39,7 @@ public class PersistenceService {
      * Find all saved calculationPersistence so fare
      * @return
      */
-    public Flux<PnLCalculationPersistence> findAll() {
+    public Flux<PnLCalculationResult> findAll() {
         return calculationRepository.findAll();
     }
 
