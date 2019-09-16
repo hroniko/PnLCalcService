@@ -1,6 +1,7 @@
 package com.hroniko.pnl.rest.controller;
 
 
+import com.hroniko.pnl.entities.results.PnLCalculationNodeResult;
 import com.hroniko.pnl.entities.results.PnLCalculationResult;
 import com.hroniko.pnl.logic.ParallelCalculationQuoteLogic;
 import com.hroniko.pnl.logic.SerialCalculationQuoteLogic;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -34,20 +36,28 @@ public class CalculationController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/calculate/quote", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Mono<PnLCalculationResult> calculateByQuote(@RequestBody Quote quote) {
-        return calculationService
+    public Flux<PnLCalculationNodeResult> calculateByQuote(@RequestBody Quote quote) {
+        Mono<PnLCalculationResult> calculationResult = calculationService
                 .setCalculationQuoteLogic(serialCalculationQuoteLogic)
-                .calculateByQuote(quote)
-                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
+                .calculateByQuote(quote);
+
+        calculationResult.subscribe(persistenceService::save);
+
+        return calculationResult.map(PnLCalculationResult::getNodes).flatMapMany(Flux::fromIterable);
+//                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
     }
 
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/calculate/quote/parallel", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Mono<PnLCalculationResult> calculateByQuoteParallel(@RequestBody Quote quote) {
-        return calculationService
+    public Flux<PnLCalculationNodeResult> calculateByQuoteParallel(@RequestBody Quote quote) {
+        Mono<PnLCalculationResult> calculationResult = calculationService
                 .setCalculationQuoteLogic(parallelCalculationQuoteLogic)
-                .calculateByQuote(quote)
-                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
+                .calculateByQuote(quote);
+
+        calculationResult.subscribe(persistenceService::save);
+
+        return calculationResult.map(PnLCalculationResult::getNodes).flatMapMany(Flux::fromIterable);
+//                .flatMap(calc -> Mono.defer(() -> persistenceService.save(calc)));
     }
 }
